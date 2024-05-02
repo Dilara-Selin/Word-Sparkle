@@ -1,4 +1,7 @@
-# WordSparkle Yardım Dokümantasyonu
+# WordSparkle 
+
+"WordSparkle, dil öğrenme sürecini eğlenceli ve etkili hale getiren bir mobil uygulamadır. Uygulama, kullanıcıların kelimeleri eklerken hem görsel hem de pratik kullanım örnekleriyle desteklenen bir ortam sağlar. Ayrıca, kullanıcıların öğrendikleri kelimeleri kalıcı hale getirmelerine yardımcı olmak için özel olarak tasarlanmış test modülü, 6 defa tekrar prensibi üzerine kuruludur. Başarı modülü, kullanıcıların öğrenme ilerlemelerini izlemelerine ve kelimelerin başarı oranlarını görmelerine olanak tanır. WordSparkle, dil öğrenme deneyimini kişiselleştirilmiş ve eğlenceli bir şekilde sunarak, kullanıcıların hedeflerine daha hızlı ve daha keyifli bir şekilde ulaşmalarını sağlar."
+
 
 ## Giriş ve Kayıt Ol
 
