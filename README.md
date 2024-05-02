@@ -9,8 +9,8 @@
 ## Ana Ekran
 
 1. **Kelime Ekleme Modülü:** Bu bölümde, yeni kelimeler ekleyebilirsiniz.
-   - **Kelime Ekle:** İngilizce kelimeyi, Türkçe karşılığını, İngilizce bir cümle içinde kullanımını ve isteğe bağlı olarak bir resmi ekleyin.
-   - **Test Yap:** Eklediğiniz kelimelerle 6 defa tekrar prensipli test yapın. Test sonuçları başarı modülünde görüntülenecektir.
+   - **Kelime Ekle:** İngilizce kelimeyi, Türkçe karşılığını, İngilizce bir cümle içinde kullanımını ve  bir resmi ekleyin.
+   
 
 2. **Test Modülü:** Bu bölümde, eklediğiniz kelimelerle test yapabilirsiniz.
    - **Test Et:** Eklediğiniz kelimelerle 6 defa tekrar prensipli test yapın ve kelimeleri pekiştirin.
