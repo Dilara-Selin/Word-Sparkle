@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dersleri/demos/SplashScreen.dart';
 import 'package:flutter_dersleri/demos/forgot_password.dart';
 import 'package:flutter_dersleri/demos/hesap_olustur.dart';
 import 'package:flutter_dersleri/demos/home_page.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      home: SplashScreen(),
       routes: {
         "/forgotPasswordPage": (context) => ForgotPassword(),
         "/loginPage": (context) => LoginPage(),
@@ -41,7 +43,6 @@ class MyApp extends StatelessWidget {
           elevation: 0,
         ),
       ),
-      home: LoginPage(),
     );
   }
 }
