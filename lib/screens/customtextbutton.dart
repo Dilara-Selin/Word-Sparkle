@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dersleri/utils/custom_colors.dart';
+import 'package:last_project/screens/customcolors.dart';
 
 class CustomTextButton extends StatelessWidget {
   final VoidCallback onPressed;
@@ -14,9 +14,8 @@ class CustomTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: TextButton(
-            onPressed: onPressed,
-            child: Text(buttonText, style: TextStyle(color: textColor))));
+    return TextButton(
+        onPressed: onPressed,
+        child: Text(buttonText, style: TextStyle(color: textColor)));
   }
 }
