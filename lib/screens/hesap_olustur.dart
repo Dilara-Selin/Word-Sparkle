@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:last_project/screens/login.dart';
 
 class HesapPage extends StatefulWidget {
   const HesapPage({super.key});
@@ -19,13 +20,12 @@ class _HesapPageState extends State<HesapPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFCE4EC),
-      appBar: AppBar(),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 110),
+              const SizedBox(height: 150),
               Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Form(
@@ -105,9 +105,10 @@ class _HesapPageState extends State<HesapPage> {
   Center loginUpButton() {
     return Center(
       child: TextButton(
-        onPressed: () {
-          Navigator.pushReplacementNamed(context, "/loginPage");
-        },
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LoginPage()),
+        ),
         child: const Text(
           "Giriş Yap",
           style: TextStyle(color: Color(0xff31274F)),

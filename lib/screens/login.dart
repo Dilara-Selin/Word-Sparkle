@@ -1,9 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dersleri/demos/forgot_password.dart';
-import 'package:flutter_dersleri/services/auth_service.dart';
-import 'package:flutter_dersleri/widget/custom_text_button.dart';
+import 'package:last_project/screens/authservice.dart';
+import 'package:last_project/screens/customtextbutton.dart';
+import 'package:last_project/screens/forgotpassword.dart';
+import 'package:last_project/screens/hesap_olustur.dart';
+import 'package:last_project/screens/home.dart';
 
+// ignore: must_be_immutable
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
 
@@ -23,7 +26,7 @@ class LoginPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 160),
+              const SizedBox(height: 150),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Form(
@@ -41,34 +44,15 @@ class LoginPage extends StatelessWidget {
                       nameTextField(),
                       const SizedBox(height: 30),
                       passwordTextField(),
-                      const SizedBox(height: 10),
-                      Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return ForgotPassword();
-                                  }));
-                                },
-                                child: const Text("Forgot Password ?",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
-                              )
-                            ],
-                          )),
-                      // Center(
-                      //     child: CustomTextButton(
-                      //         onPressed: () => Navigator.push(
-                      //               context,
-                      //               MaterialPageRoute(
-                      //                   builder: (context) => ForgotPassword()),
-                      //             ),
-                      //         buttonText: "Sifremi Unuttum")),
-
+                      const SizedBox(height: 30),
+                      Center(
+                          child: CustomTextButton(
+                              onPressed: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ForgotPassword()),
+                                  ),
+                              buttonText: "Sifremi Unuttum")),
                       const SizedBox(
                         height: 10,
                       ),
@@ -81,8 +65,11 @@ class LoginPage extends StatelessWidget {
                                 final userResult = await firebaseAuth
                                     .signInWithEmailAndPassword(
                                         email: email, password: password);
-                                Navigator.pushReplacementNamed(
-                                    context, "/homePage");
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const HomeScreen()),
+                                );
                                 print(userResult.user!.email);
                               } catch (e) {
                                 print(e.toString());
@@ -109,8 +96,12 @@ class LoginPage extends StatelessWidget {
                       const SizedBox(height: 10),
                       Center(
                           child: CustomTextButton(
-                              onPressed: () => Navigator.pushReplacementNamed(
-                                  context, "/signUpPage"),
+                              onPressed: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const HesapPage()),
+                                  ),
                               buttonText: "Hesap Olustur")),
                       const SizedBox(
                         height: 5,
