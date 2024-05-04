@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'home_page.dart'; // Ana uygulama ekranının dosyasını içeri aktarın
+import 'home.dart'; // Ana uygulama ekranının dosyasını içeri aktarın
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -14,7 +14,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(Duration(seconds: 3), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-            builder: (_) => HomePage()), // Ana ekranınızın adını verin
+            builder: (_) => HomeScreen()), // Ana ekranınızın adını verin
       );
     });
   }
