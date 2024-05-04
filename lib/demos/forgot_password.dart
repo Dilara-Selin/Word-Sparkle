@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dersleri/demos/hesap_olustur.dart';
 import 'package:flutter_dersleri/services/auth_service.dart';
-import 'package:flutter_dersleri/utils/custom_colors.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
@@ -28,7 +27,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       showDialog(
           context: context,
           builder: (context) {
-            return AlertDialog(
+            return const AlertDialog(
               content: Text('Password reset link sent ! Check your email'),
             );
           });
@@ -129,7 +128,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       controller: _emailController,
       validator: (value) {
         if (value!.isEmpty) {
-          return "Bilgileri Eksiksiz Doldurunuz";
+          return "Bilgileri Eksiksiz Doldurunuz.";
         } else {}
       },
       onSaved: (value) {
@@ -145,66 +144,3 @@ class PaddingItems {
       EdgeInsets.symmetric(horizontal: 20);
   static const EdgeInsets verticalPadding = EdgeInsets.symmetric(vertical: 20);
 }
-// Form(
-                //     key: formkey,
-                //     child: Column(
-                //       crossAxisAlignment: CrossAxisAlignment.start,
-                //       children: [
-                //         const Text(
-                //           "Forgot Password \n\nSifrenizi size e posta yoluyla gönderebilmemiz için email adresinizi giriniz.",
-                //           style: TextStyle(
-                //             fontSize: 20,
-                //             color: Color(0xff31274F),
-                //           ),
-                //         ),
-                //         const SizedBox(height: 30),
-                //         TextFormField(
-                //           validator: (value) {
-                //             if (value!.isEmpty) {
-                //               return "Bilgileri eksiksiz giriniz";
-                //             } else {}
-                //             return null;
-                //           },
-                //           onSaved: (value) {
-                //             email = value!;
-                //           },
-                //           decoration: customInputDecoration("email"),
-                //         ),
-                //         const SizedBox(height: 30),
-                //         Center(
-                //           child: TextButton(
-                //             onPressed: () async {
-                //               await FirebaseAuth.instance
-                //                   .sendPasswordResetEmail(email: email);
-                //             },
-                //             child: Container(
-                //               height: 50,
-                //               width: 150,
-                //               margin:
-                //                   const EdgeInsets.symmetric(horizontal: 60),
-                //               decoration: BoxDecoration(
-                //                 borderRadius: BorderRadius.circular(50),
-                //                 color: const Color(0xff31274F),
-                //               ),
-                //               child: const Center(
-                //                 child: Text(
-                //                   "Gönder",
-                //                   style: TextStyle(color: Colors.white),
-                //                 ),
-                //               ),
-                //             ),
-                //           ),
-                //         ),
-
-
-
-
-
-
-              //    MaterialButton(
-              //   onPressed: passwordReset,
-              //   child: Text(
-              //     'Reset Password',
-              //   ),
-              //   color: CustomColors.scaffoldBackGroundColor,
-              // ),
