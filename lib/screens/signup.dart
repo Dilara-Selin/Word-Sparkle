@@ -1,15 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:last_project/screens/login.dart';
+import 'package:word_sparkle/screens/login.dart';
 
-class HesapPage extends StatefulWidget {
-  const HesapPage({super.key});
+class SignupPage extends StatefulWidget {
+  const SignupPage({super.key});
 
   @override
-  State<HesapPage> createState() => _HesapPageState();
+  State<SignupPage> createState() => _SignupPageState();
 }
 
-class _HesapPageState extends State<HesapPage> {
+class _SignupPageState extends State<SignupPage> {
   late String email, password, userName, rpassword;
 
   final formkey = GlobalKey<FormState>();

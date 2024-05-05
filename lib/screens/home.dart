@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:last_project/screens/ayarlar.dart';
-import 'package:last_project/screens/kelime_ekle.dart';
+import 'package:word_sparkle/customs/customcolors.dart';
+import 'package:word_sparkle/screens/addword.dart';
+import 'package:word_sparkle/screens/settings.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,7 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: const Color(0xFFFBE1EF),
+        backgroundColor: CustomColors.backgroundcolor,
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -36,13 +37,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const KelimeEkle(),
+                        builder: (context) => const AddWord(),
                       ),
                     );
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(230, 100),
-                    backgroundColor: Colors.black.withOpacity(0.75),
+                    backgroundColor: CustomColors.buttoncolor,
                   ),
                   child: const Text("Kelime Ekle",
                       style: TextStyle(
@@ -57,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(230, 100),
-                    backgroundColor: Colors.black.withOpacity(0.75),
+                    backgroundColor: CustomColors.buttoncolor,
                   ),
                   child: const Text("Quiz",
                       style: TextStyle(
@@ -72,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
                       minimumSize: const Size(230, 100),
-                      backgroundColor: Colors.black.withOpacity(0.75)),
+                      backgroundColor: CustomColors.buttoncolor),
                   child: const Text("Başarı İstatistiği",
                       style: TextStyle(
                         fontSize: 20,
@@ -90,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const Ayarlar(),
+                            builder: (context) => const SettingsPage(),
                           ),
                         );
                       },

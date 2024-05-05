@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "last_project" "\0"
+            VALUE "FileDescription", "word_sparkle" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "last_project" "\0"
+            VALUE "InternalName", "word_sparkle" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "last_project.exe" "\0"
-            VALUE "ProductName", "last_project" "\0"
+            VALUE "OriginalFilename", "word_sparkle.exe" "\0"
+            VALUE "ProductName", "word_sparkle" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

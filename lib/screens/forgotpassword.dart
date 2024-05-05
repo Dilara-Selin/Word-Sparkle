@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dersleri/demos/hesap_olustur.dart';
-import 'package:flutter_dersleri/services/auth_service.dart';
+import 'package:word_sparkle/screens/authservice.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
@@ -134,7 +133,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       onSaved: (value) {
         email = value!;
       },
-      decoration: customInputDecoration("email"),
     );
   }
 }

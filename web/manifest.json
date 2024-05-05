@@ -1,6 +1,6 @@
 {
-    "name": "last_project",
-    "short_name": "last_project",
+    "name": "word_sparkle",
+    "short_name": "word_sparkle",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

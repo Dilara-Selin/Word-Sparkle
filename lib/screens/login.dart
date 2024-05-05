@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:last_project/screens/authservice.dart';
-import 'package:last_project/screens/customtextbutton.dart';
-import 'package:last_project/screens/forgotpassword.dart';
-import 'package:last_project/screens/hesap_olustur.dart';
-import 'package:last_project/screens/home.dart';
+import 'package:word_sparkle/customs/customtextbutton.dart';
+import 'package:word_sparkle/screens/authservice.dart';
+import 'package:word_sparkle/screens/forgotpassword.dart';
+import 'package:word_sparkle/screens/home.dart';
+import 'package:word_sparkle/screens/signup.dart';
 
 // ignore: must_be_immutable
 class LoginPage extends StatelessWidget {
@@ -50,7 +50,8 @@ class LoginPage extends StatelessWidget {
                               onPressed: () => Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => ForgotPassword()),
+                                        builder: (context) =>
+                                            const ForgotPassword()),
                                   ),
                               buttonText: "Sifremi Unuttum")),
                       const SizedBox(
@@ -100,7 +101,7 @@ class LoginPage extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const HesapPage()),
+                                            const SignupPage()),
                                   ),
                               buttonText: "Hesap Olustur")),
                       const SizedBox(
