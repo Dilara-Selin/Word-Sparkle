@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:last_projectt/screens/login.dart';
 
 class SignupPage extends StatefulWidget {
-  const SignupPage({super.key});
+  const SignupPage({Key? key}) : super(key: key);
 
   @override
   State<SignupPage> createState() => _SignupPageState();
@@ -27,26 +27,27 @@ class _SignupPageState extends State<SignupPage> {
             children: [
               const SizedBox(height: 150),
               Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Form(
-                    key: formkey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        titleText(),
-                        const SizedBox(height: 20),
-                        nameTextField(),
-                        const SizedBox(height: 20),
-                        emailTextField(),
-                        const SizedBox(height: 20),
-                        passwordTextField(),
-                        const SizedBox(height: 20),
-                        signUpButton(),
-                        const SizedBox(height: 10),
-                        loginUpButton(),
-                      ],
-                    ),
-                  ))
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Form(
+                  key: formkey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      titleText(),
+                      const SizedBox(height: 20),
+                      nameTextField(),
+                      const SizedBox(height: 20),
+                      emailTextField(),
+                      const SizedBox(height: 20),
+                      passwordTextField(),
+                      const SizedBox(height: 20),
+                      signUpButton(),
+                      const SizedBox(height: 10),
+                      loginUpButton(),
+                    ],
+                  ),
+                ),
+              )
             ],
           ),
         ),
@@ -56,9 +57,12 @@ class _SignupPageState extends State<SignupPage> {
 
   Text titleText() {
     return const Text(
-      "Merhaba,Hoşgeldiniz",
+      "Merhaba, Hoşgeldiniz",
       style: TextStyle(
-          fontSize: 30, color: Color(0xff31274F), fontWeight: FontWeight.bold),
+        fontSize: 30,
+        color: Color(0xff31274F),
+        fontWeight: FontWeight.bold,
+      ),
     );
   }
 
@@ -70,18 +74,21 @@ class _SignupPageState extends State<SignupPage> {
             formkey.currentState!.save();
 
             try {
-              var userResult =
-                  await firebaseAuth.createUserWithEmailAndPassword(
-                      email: email, password: password);
+              await firebaseAuth.createUserWithEmailAndPassword(
+                email: email,
+                password: password,
+              );
               formkey.currentState!.reset();
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text(
-                      "Kayıt Yapıldı , Giris sayfasına yönlendiriliyorsunuz ")));
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Kayıt yapıldı, Giriş sayfasına yönlendiriliyorsunuz"),
+                ),
+              );
               Navigator.pushReplacementNamed(context, "/loginPage");
             } catch (e) {
               print(e.toString());
             }
-          } else {}
+          }
         },
         child: Container(
           height: 50,
@@ -105,10 +112,12 @@ class _SignupPageState extends State<SignupPage> {
   Center loginUpButton() {
     return Center(
       child: TextButton(
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => LoginPage()),
-        ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => LoginPage()),
+          );
+        },
         child: const Text(
           "Giriş Yap",
           style: TextStyle(color: Color(0xff31274F)),
@@ -122,7 +131,8 @@ class _SignupPageState extends State<SignupPage> {
       validator: (value) {
         if (value!.isEmpty) {
           return "Bilgileri Eksiksiz Doldurunuz";
-        } else {}
+        }
+        return null;
       },
       onSaved: (value) {
         userName = value!;
@@ -136,7 +146,8 @@ class _SignupPageState extends State<SignupPage> {
       validator: (value) {
         if (value!.isEmpty) {
           return "Bilgileri eksiksiz giriniz";
-        } else {}
+        }
+        return null;
       },
       onSaved: (value) {
         email = value!;
@@ -150,7 +161,8 @@ class _SignupPageState extends State<SignupPage> {
       validator: (value) {
         if (value!.isEmpty) {
           return "Bilgileri eksiksiz giriniz";
-        } else {}
+        }
+        return null;
       },
       onSaved: (value) {
         password = value!;
@@ -158,24 +170,16 @@ class _SignupPageState extends State<SignupPage> {
       decoration: customInputDecoration("password"),
     );
   }
-}
 
-InputDecoration customInputDecoration(String hintText) {
-  return InputDecoration(
+  InputDecoration customInputDecoration(String hintText) {
+    return InputDecoration(
       hintText: hintText,
       enabledBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(
-          color: Colors.grey,
-        ),
+        borderSide: BorderSide(color: Colors.grey),
       ),
       focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(
-        color: Colors.grey,
-      )));
-}
-
-class PaddingItems {
-  static const EdgeInsets horizontalPadding =
-      EdgeInsets.symmetric(horizontal: 20);
-  static const EdgeInsets verticalPadding = EdgeInsets.symmetric(vertical: 20);
+        borderSide: BorderSide(color: Colors.grey),
+      ),
+    );
+  }
 }
