@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:word_sparkle/screens/home.dart';
+import 'package:last_projectt/screens/home.dart';
 
 class AddWord extends StatefulWidget {
   const AddWord({super.key});
@@ -222,9 +222,11 @@ class _AddWordState extends State<AddWord> {
                   await addDataToFirestore();
 
                   Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HomeScreen()),
-                  );
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HomeScreen(),
+                      ),
+                    );
                 },
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(200, 50),
@@ -234,7 +236,8 @@ class _AddWordState extends State<AddWord> {
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.white,
-                    )),
+                    )
+                    ),
               ),
             ),
           ],

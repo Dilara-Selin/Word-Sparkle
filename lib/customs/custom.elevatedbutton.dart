@@ -1,28 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:word_sparkle/customs/customcolors.dart';
+import 'package:last_projectt/customs/customcolors.dart';
 
 class CustomElevatedButton extends StatelessWidget {
-  final Color buttoncolor;
   final VoidCallback onpressed;
   final String content;
 
-  const CustomElevatedButton(
-      {super.key,
-      required this.buttoncolor,
-      required this.onpressed,
-      required this.content,
-      });
+  const CustomElevatedButton({
+    super.key,
+    required this.onpressed,
+    required this.content,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: onpressed,
       style: ElevatedButton.styleFrom(
         minimumSize: const Size(230, 100),
         backgroundColor: CustomColors.buttoncolor,
       ),
-
-      child:Text(
+      child: Text(
         content,
         style: const TextStyle(
           color: Colors.white,

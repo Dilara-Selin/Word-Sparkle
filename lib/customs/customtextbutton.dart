@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:word_sparkle/customs/customcolors.dart';
+import 'package:last_projectt/customs/customcolors.dart';
 
 class CustomTextButton extends StatelessWidget {
   final VoidCallback onPressed;

@@ -41,47 +41,46 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDxhfM5evBtOFZxia47UoHDtL848cXvBtk',
-    appId: '1:68984628362:web:9b07d59b6d65272f887973',
-    messagingSenderId: '68984628362',
-    projectId: 'word-sparkle',
-    authDomain: 'word-sparkle.firebaseapp.com',
-    storageBucket: 'word-sparkle.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyA9m7dxuLsn_wUhzV-AvkV53urzD-HsMO4',
-    appId: '1:68984628362:ios:c54a43ad873d4b33887973',
-    messagingSenderId: '68984628362',
-    projectId: 'word-sparkle',
-    storageBucket: 'word-sparkle.appspot.com',
-    iosBundleId: 'com.example.wordSparkle',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyA9m7dxuLsn_wUhzV-AvkV53urzD-HsMO4',
-    appId: '1:68984628362:ios:c54a43ad873d4b33887973',
-    messagingSenderId: '68984628362',
-    projectId: 'word-sparkle',
-    storageBucket: 'word-sparkle.appspot.com',
-    iosBundleId: 'com.example.wordSparkle',
-  );
-
-  static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyDxhfM5evBtOFZxia47UoHDtL848cXvBtk',
-    appId: '1:68984628362:web:36431911e9159078887973',
-    messagingSenderId: '68984628362',
-    projectId: 'word-sparkle',
-    authDomain: 'word-sparkle.firebaseapp.com',
-    storageBucket: 'word-sparkle.appspot.com',
+    apiKey: 'AIzaSyBvhmUId3rS14hVfmtzXqiTTHUBbq4QL1U',
+    appId: '1:800346051559:web:a6c4a8ad224af5875fa342',
+    messagingSenderId: '800346051559',
+    projectId: 'last-project-3b6fe',
+    authDomain: 'last-project-3b6fe.firebaseapp.com',
+    storageBucket: 'last-project-3b6fe.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCvXrK0QmbBXVD7wz_r2X-RIgiqF2uaadE',
-    appId: '1:68984628362:android:14df98e933ba00f9887973',
-    messagingSenderId: '68984628362',
-    projectId: 'word-sparkle',
-    storageBucket: 'word-sparkle.appspot.com',
+    apiKey: 'AIzaSyA38J_YPrn1C_op6s9HXrmN6LZh-l50_eE',
+    appId: '1:800346051559:android:d53ee22757b316825fa342',
+    messagingSenderId: '800346051559',
+    projectId: 'last-project-3b6fe',
+    storageBucket: 'last-project-3b6fe.appspot.com',
   );
 
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyBZccpAXK_4TP8pVAVJQ3_OwJr_nk3NlIU',
+    appId: '1:800346051559:ios:f409725dcd1f87095fa342',
+    messagingSenderId: '800346051559',
+    projectId: 'last-project-3b6fe',
+    storageBucket: 'last-project-3b6fe.appspot.com',
+    iosBundleId: 'com.example.lastProjectt',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyBZccpAXK_4TP8pVAVJQ3_OwJr_nk3NlIU',
+    appId: '1:800346051559:ios:f409725dcd1f87095fa342',
+    messagingSenderId: '800346051559',
+    projectId: 'last-project-3b6fe',
+    storageBucket: 'last-project-3b6fe.appspot.com',
+    iosBundleId: 'com.example.lastProjectt',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyBvhmUId3rS14hVfmtzXqiTTHUBbq4QL1U',
+    appId: '1:800346051559:web:36eca8947b7f5d645fa342',
+    messagingSenderId: '800346051559',
+    projectId: 'last-project-3b6fe',
+    authDomain: 'last-project-3b6fe.firebaseapp.com',
+    storageBucket: 'last-project-3b6fe.appspot.com',
+  );
 }

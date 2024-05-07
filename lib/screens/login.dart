@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:word_sparkle/customs/customtextbutton.dart';
-import 'package:word_sparkle/screens/authservice.dart';
-import 'package:word_sparkle/screens/forgotpassword.dart';
-import 'package:word_sparkle/screens/home.dart';
-import 'package:word_sparkle/screens/signup.dart';
+import 'package:last_projectt/customs/customtextbutton.dart';
+import 'package:last_projectt/screens/authservice.dart';
+import 'package:last_projectt/screens/forgotpassword.dart';
+import 'package:last_projectt/screens/home.dart';
+import 'package:last_projectt/screens/signup.dart';
 
 // ignore: must_be_immutable
 class LoginPage extends StatelessWidget {
