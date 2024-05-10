@@ -15,7 +15,7 @@ class LoginPage extends StatelessWidget {
 
   late final String email;
   late final String password;
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -117,7 +117,8 @@ class LoginPage extends StatelessWidget {
                           onPressed: () async {
                             final result = await authService.signInAnonymous();
                             if (result != null) {
-                              Navigator.pushReplacementNamed(context, "/homePage");
+                              Navigator.pushReplacementNamed(
+                                  context, "/homePage");
                             } else {
                               print("Hata ile karşılaşıldı");
                             }
