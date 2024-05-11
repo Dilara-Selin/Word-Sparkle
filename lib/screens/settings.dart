@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Ayarlar extends StatefulWidget {
-  const Ayarlar({super.key});
+class SettingsPage extends StatefulWidget {
+  const SettingsPage({super.key});
 
   @override
-  State<Ayarlar> createState() => _AyarlarState();
+  State<SettingsPage> createState() => _SettingsPageState();
 }
 
-class _AyarlarState extends State<Ayarlar> {
+class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     double deviceHeight = MediaQuery.of(context).size.height;

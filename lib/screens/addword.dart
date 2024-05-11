@@ -5,15 +5,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:last_projectt/screens/home.dart';
 
-class KelimeEkle extends StatefulWidget {
-  const KelimeEkle({super.key});
+class AddWord extends StatefulWidget {
+  const AddWord({super.key});
 
   @override
-  State<KelimeEkle> createState() => _KelimeEkleState();
+  State<AddWord> createState() => _AddWordState();
 }
 
-class _KelimeEkleState extends State<KelimeEkle> {
+class _AddWordState extends State<AddWord> {
   final _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -219,6 +220,13 @@ class _KelimeEkleState extends State<KelimeEkle> {
                   print(cumleController.text);
 
                   await addDataToFirestore();
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HomeScreen(),
+                      ),
+                    );
                 },
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(200, 50),
@@ -228,7 +236,8 @@ class _KelimeEkleState extends State<KelimeEkle> {
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.white,
-                    )),
+                    )
+                    ),
               ),
             ),
           ],

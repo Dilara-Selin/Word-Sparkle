@@ -1,15 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:last_project/screens/login.dart';
+import 'package:last_projectt/screens/login.dart';
 
-class HesapPage extends StatefulWidget {
-  const HesapPage({super.key});
+class SignupPage extends StatefulWidget {
+  const SignupPage({Key? key}) : super(key: key);
 
   @override
-  State<HesapPage> createState() => _HesapPageState();
+  State<SignupPage> createState() => _SignupPageState();
 }
 
-class _HesapPageState extends State<HesapPage> {
+class _SignupPageState extends State<SignupPage> {
   late String email, password, userName, rpassword;
 
   final formkey = GlobalKey<FormState>();
@@ -27,26 +27,27 @@ class _HesapPageState extends State<HesapPage> {
             children: [
               const SizedBox(height: 150),
               Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Form(
-                    key: formkey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        titleText(),
-                        const SizedBox(height: 20),
-                        nameTextField(),
-                        const SizedBox(height: 20),
-                        emailTextField(),
-                        const SizedBox(height: 20),
-                        passwordTextField(),
-                        const SizedBox(height: 20),
-                        signUpButton(),
-                        const SizedBox(height: 10),
-                        loginUpButton(),
-                      ],
-                    ),
-                  ))
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Form(
+                  key: formkey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      titleText(),
+                      const SizedBox(height: 20),
+                      nameTextField(),
+                      const SizedBox(height: 20),
+                      emailTextField(),
+                      const SizedBox(height: 20),
+                      passwordTextField(),
+                      const SizedBox(height: 20),
+                      signUpButton(),
+                      const SizedBox(height: 10),
+                      loginUpButton(),
+                    ],
+                  ),
+                ),
+              )
             ],
           ),
         ),
@@ -56,9 +57,12 @@ class _HesapPageState extends State<HesapPage> {
 
   Text titleText() {
     return const Text(
-      "Merhaba,Hoşgeldiniz",
+      "Merhaba, Hoşgeldiniz",
       style: TextStyle(
-          fontSize: 30, color: Color(0xff31274F), fontWeight: FontWeight.bold),
+        fontSize: 30,
+        color: Color(0xff31274F),
+        fontWeight: FontWeight.bold,
+      ),
     );
   }
 
@@ -70,18 +74,21 @@ class _HesapPageState extends State<HesapPage> {
             formkey.currentState!.save();
 
             try {
-              var userResult =
-                  await firebaseAuth.createUserWithEmailAndPassword(
-                      email: email, password: password);
+              await firebaseAuth.createUserWithEmailAndPassword(
+                email: email,
+                password: password,
+              );
               formkey.currentState!.reset();
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text(
-                      "Kayıt Yapıldı , Giris sayfasına yönlendiriliyorsunuz ")));
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Kayıt yapıldı, Giriş sayfasına yönlendiriliyorsunuz"),
+                ),
+              );
               Navigator.pushReplacementNamed(context, "/loginPage");
             } catch (e) {
               print(e.toString());
             }
-          } else {}
+          }
         },
         child: Container(
           height: 50,
@@ -105,10 +112,12 @@ class _HesapPageState extends State<HesapPage> {
   Center loginUpButton() {
     return Center(
       child: TextButton(
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => LoginPage()),
-        ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => LoginPage()),
+          );
+        },
         child: const Text(
           "Giriş Yap",
           style: TextStyle(color: Color(0xff31274F)),
@@ -122,7 +131,8 @@ class _HesapPageState extends State<HesapPage> {
       validator: (value) {
         if (value!.isEmpty) {
           return "Bilgileri Eksiksiz Doldurunuz";
-        } else {}
+        }
+        return null;
       },
       onSaved: (value) {
         userName = value!;
@@ -136,7 +146,8 @@ class _HesapPageState extends State<HesapPage> {
       validator: (value) {
         if (value!.isEmpty) {
           return "Bilgileri eksiksiz giriniz";
-        } else {}
+        }
+        return null;
       },
       onSaved: (value) {
         email = value!;
@@ -150,7 +161,8 @@ class _HesapPageState extends State<HesapPage> {
       validator: (value) {
         if (value!.isEmpty) {
           return "Bilgileri eksiksiz giriniz";
-        } else {}
+        }
+        return null;
       },
       onSaved: (value) {
         password = value!;
@@ -158,24 +170,16 @@ class _HesapPageState extends State<HesapPage> {
       decoration: customInputDecoration("password"),
     );
   }
-}
 
-InputDecoration customInputDecoration(String hintText) {
-  return InputDecoration(
+  InputDecoration customInputDecoration(String hintText) {
+    return InputDecoration(
       hintText: hintText,
       enabledBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(
-          color: Colors.grey,
-        ),
+        borderSide: BorderSide(color: Colors.grey),
       ),
       focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(
-        color: Colors.grey,
-      )));
-}
-
-class PaddingItems {
-  static const EdgeInsets horizontalPadding =
-      EdgeInsets.symmetric(horizontal: 20);
-  static const EdgeInsets verticalPadding = EdgeInsets.symmetric(vertical: 20);
+        borderSide: BorderSide(color: Colors.grey),
+      ),
+    );
+  }
 }

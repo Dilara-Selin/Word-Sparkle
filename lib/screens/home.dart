@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:last_project/screens/ayarlar.dart';
-import 'package:last_project/screens/kelime_ekle.dart';
+import 'package:last_projectt/customs/custom.elevatedbutton.dart';
+import 'package:last_projectt/screens/addword.dart';
+import 'package:last_projectt/screens/quiz.dart';
+import 'package:last_projectt/screens/settings.dart';
+import 'package:last_projectt/screens/success.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -31,53 +34,40 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 60),
-                child: ElevatedButton(
-                  onPressed: () {
+                child: CustomElevatedButton(
+                  onpressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const AddWord()),
+                    );
+                  },
+                  content: "Kelime Ekle",
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 40),
+                child: CustomElevatedButton(
+                  onpressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Question()),
+                    );
+                  },
+                  content: "Quiz",
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 40),
+                child: CustomElevatedButton(
+                  onpressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const KelimeEkle(),
+                        builder: (context) => const SuccessPage(),
                       ),
                     );
                   },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(230, 100),
-                    backgroundColor: Colors.black.withOpacity(0.75),
-                  ),
-                  child: const Text("Kelime Ekle",
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                      )),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 40),
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(230, 100),
-                    backgroundColor: Colors.black.withOpacity(0.75),
-                  ),
-                  child: const Text("Quiz",
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                      )),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 40),
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(230, 100),
-                      backgroundColor: Colors.black.withOpacity(0.75)),
-                  child: const Text("Başarı İstatistiği",
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                      )),
+                  content: "Başarı İstatistiği",
                 ),
               ),
               Row(
@@ -90,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const Ayarlar(),
+                            builder: (context) => const SettingsPage(),
                           ),
                         );
                       },

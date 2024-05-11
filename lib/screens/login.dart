@@ -1,22 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:last_project/screens/authservice.dart';
-import 'package:last_project/screens/customtextbutton.dart';
-import 'package:last_project/screens/forgotpassword.dart';
-import 'package:last_project/screens/hesap_olustur.dart';
-import 'package:last_project/screens/home.dart';
+import 'package:last_projectt/customs/customtextbutton.dart';
+import 'package:last_projectt/screens/authservice.dart';
+import 'package:last_projectt/screens/forgotpassword.dart';
+import 'package:last_projectt/screens/home.dart';
+import 'package:last_projectt/screens/signup.dart';
 
-// ignore: must_be_immutable
 class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
-
-  late String email, password, userName, rpassword;
+  LoginPage({Key? key});
 
   final formkey = GlobalKey<FormState>();
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  final AuthService authService = AuthService();
 
-  final firebaseAuth = FirebaseAuth.instance;
+  late final String email;
+  late final String password;
 
-  final authService = AuthService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,24 +34,28 @@ class LoginPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        "Merhaba,Hoşgeldiniz",
+                        "Merhaba, Hoşgeldiniz",
                         style: TextStyle(
-                            fontSize: 30,
-                            color: Color(0xff31274F),
-                            fontWeight: FontWeight.bold),
+                          fontSize: 30,
+                          color: Color(0xff31274F),
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       nameTextField(),
                       const SizedBox(height: 30),
                       passwordTextField(),
                       const SizedBox(height: 30),
                       Center(
-                          child: CustomTextButton(
-                              onPressed: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ForgotPassword()),
-                                  ),
-                              buttonText: "Sifremi Unuttum")),
+                        child: CustomTextButton(
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ForgotPassword(),
+                            ),
+                          ),
+                          buttonText: "Şifremi Unuttum",
+                        ),
+                      ),
                       const SizedBox(
                         height: 10,
                       ),
@@ -62,19 +65,20 @@ class LoginPage extends StatelessWidget {
                             if (formkey.currentState!.validate()) {
                               formkey.currentState!.save();
                               try {
-                                final userResult = await firebaseAuth
-                                    .signInWithEmailAndPassword(
-                                        email: email, password: password);
+                                await firebaseAuth.signInWithEmailAndPassword(
+                                  email: email,
+                                  password: password,
+                                );
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const HomeScreen()),
+                                    builder: (context) => const HomeScreen(),
+                                  ),
                                 );
-                                print(userResult.user!.email);
                               } catch (e) {
                                 print(e.toString());
                               }
-                            } else {}
+                            }
                           },
                           child: Container(
                             height: 50,
@@ -95,39 +99,33 @@ class LoginPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 10),
                       Center(
-                          child: CustomTextButton(
-                              onPressed: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const HesapPage()),
-                                  ),
-                              buttonText: "Hesap Olustur")),
+                        child: CustomTextButton(
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SignupPage(),
+                            ),
+                          ),
+                          buttonText: "Hesap Oluştur",
+                        ),
+                      ),
                       const SizedBox(
                         height: 5,
                       ),
                       Center(
                         child: CustomTextButton(
-                            onPressed: () async {
-                              final result =
-                                  await authService.signInAnonymous();
-                              if (result != null) {
-                                Navigator.pushReplacementNamed(
-                                    context, "/homePage");
-                              } else {
-                                print("Hata ile karsılasıldı");
-                              }
-                            },
-                            buttonText: "Misafir Girisi"),
+                          onPressed: () async {
+                            final result = await authService.signInAnonymous();
+                            if (result != null) {
+                              Navigator.pushReplacementNamed(
+                                  context, "/homePage");
+                            } else {
+                              print("Hata ile karşılaşıldı");
+                            }
+                          },
+                          buttonText: "Misafir Girişi",
+                        ),
                       ),
-                      // Center(
-                      //   child: CustomTextButton(
-                      //       onPressed: () async {
-                      //         final result =
-                      //             await authService.forgotPassword(email);
-                      //       },
-                      //       buttonText: "Sifremi Unuttum"),
-                      // )
                     ],
                   ),
                 ),
@@ -139,25 +137,18 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  void signIn() async {
-    if (formkey.currentState!.validate()) {
-      formkey.currentState!.save();
-      final result = await authService.signIn(email, password);
-      print(result);
-    }
-  }
-
   TextFormField nameTextField() {
     return TextFormField(
       validator: (value) {
         if (value!.isEmpty) {
           return "Bilgileri Eksiksiz Doldurunuz";
-        } else {}
+        }
+        return null;
       },
       onSaved: (value) {
         email = value!;
       },
-      decoration: customInputDecoration("email"),
+      decoration: customInputDecoration("Email"),
     );
   }
 
@@ -166,32 +157,25 @@ class LoginPage extends StatelessWidget {
       validator: (value) {
         if (value!.isEmpty) {
           return "Bilgileri eksiksiz giriniz";
-        } else {}
+        }
+        return null;
       },
       onSaved: (value) {
         password = value!;
       },
-      decoration: customInputDecoration("password"),
+      decoration: customInputDecoration("Şifre"),
     );
   }
-}
 
-InputDecoration customInputDecoration(String hintText) {
-  return InputDecoration(
+  InputDecoration customInputDecoration(String hintText) {
+    return InputDecoration(
       hintText: hintText,
       enabledBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(
-          color: Colors.grey,
-        ),
+        borderSide: BorderSide(color: Colors.grey),
       ),
       focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(
-        color: Colors.grey,
-      )));
-}
-
-class PaddingItems {
-  static const EdgeInsets horizontalPadding =
-      EdgeInsets.symmetric(horizontal: 20);
-  static const EdgeInsets verticalPadding = EdgeInsets.symmetric(vertical: 20);
+        borderSide: BorderSide(color: Colors.grey),
+      ),
+    );
+  }
 }
