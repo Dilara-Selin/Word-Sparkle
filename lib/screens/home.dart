@@ -50,7 +50,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   onpressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const Question()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const Question(questionCount: 10)),
                     );
                   },
                   content: "Quiz",

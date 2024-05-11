@@ -3,7 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Question extends StatefulWidget {
-  const Question({super.key});
+  final double questionCount;
+
+  const Question({Key? key, required this.questionCount}) : super(key: key);
 
   @override
   _QuestState createState() => _QuestState();
@@ -13,26 +15,32 @@ class _QuestState extends State<Question> {
   final answerController = TextEditingController();
   List<DocumentSnapshot> ingilizce = [];
   int currentWordIndex = 0;
+  late int questionCount;
 
   @override
   void initState() {
     super.initState();
-    _loadWords();
+    _loadSettings();
   }
 
-  Future<void> _loadWords() async {
+  void _loadWords() async {
     try {
       String? kullaniciId = FirebaseAuth.instance.currentUser?.uid;
 
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(kullaniciId)
-          .collection('words')
-          .get();
-      setState(() {
-        ingilizce = querySnapshot.docs;
-      });
-      print('Words loaded: ${ingilizce.length}');
+      if (kullaniciId != null) {
+        QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(kullaniciId)
+            .collection('words')
+            .limit(questionCount.toInt()) // İstenen kadar kelimeyi al
+            .get();
+        setState(() {
+          ingilizce = querySnapshot.docs;
+        });
+        print('Words loaded: ${ingilizce.length}');
+      } else {
+        print('User ID is null');
+      }
     } catch (error) {
       print('Failed to load words: $error');
     }
@@ -42,9 +50,31 @@ class _QuestState extends State<Question> {
     setState(() {
       currentWordIndex++;
       if (currentWordIndex >= ingilizce.length) {
-        currentWordIndex = 0;
+        currentWordIndex = 1;
       }
     });
+  }
+
+  void _loadSettings() async {
+    try {
+      String? kullaniciId = FirebaseAuth.instance.currentUser?.uid;
+      DocumentSnapshot settingsDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(kullaniciId)
+          .collection('settings')
+          .doc('user_settings')
+          .get();
+      setState(() {
+        questionCount = settingsDoc.exists
+            ? (settingsDoc.data() as Map<String, dynamic>)['questionCount']
+                    ?.toInt() ??
+                10
+            : 10; // varsayılan değer
+      });
+      _loadWords(); // Ayarlar yüklendikten sonra kelimeleri yükle
+    } catch (error) {
+      print('Kullanıcı ayarları yüklenirken bir hata oluştu: $error');
+    }
   }
 
   @override
@@ -207,6 +237,10 @@ class _QuestState extends State<Question> {
       );
     }
 
+    if (currentWordIndex >= questionCount) {
+      print('Reached question limit');
+      return;
+    }
     _nextWord();
   }
 }
