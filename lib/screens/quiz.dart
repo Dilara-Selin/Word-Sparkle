@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class Question extends StatefulWidget {
   final double questionCount;
 
-  const Question({Key? key, required this.questionCount}) : super(key: key);
+  const Question({super.key, required this.questionCount});
 
   @override
   _QuestState createState() => _QuestState();
@@ -208,6 +208,7 @@ class _QuestState extends State<Question> {
     String? correctAnswer = ingilizce[currentWordIndex].get('turkce');
     if (correctAnswer != null &&
         answer.toLowerCase() == correctAnswer.toLowerCase()) {
+      // Doğru cevaplandığında
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Row(
@@ -221,7 +222,11 @@ class _QuestState extends State<Question> {
           backgroundColor: Colors.green,
         ),
       );
+
+      // Toplam doğru sayısını artır ve ard arda doğru sayısını güncelle
+      _updateCorrectCounts(true);
     } else {
+      // Yanlış cevaplandığında
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Row(
@@ -235,6 +240,9 @@ class _QuestState extends State<Question> {
           backgroundColor: Colors.red,
         ),
       );
+
+      // Toplam doğru sayısını sıfırla ve ard arda doğru sayısını sıfırla
+      _updateCorrectCounts(false);
     }
 
     if (currentWordIndex >= questionCount) {
@@ -242,5 +250,37 @@ class _QuestState extends State<Question> {
       return;
     }
     _nextWord();
+  }
+
+  void _updateCorrectCounts(bool isCorrect) {
+    // Toplam doğru sayısını artır veya sıfırla
+    String totalCorrectField = 'toplamDogru';
+    String consecutiveCorrectField = 'artArdaDogru';
+    String totalWrongField = 'toplamYanlis';
+
+    // Doğru sayısını artır veya sıfırla
+    if (isCorrect) {
+      // Doğru cevaplandığında
+      ingilizce[currentWordIndex].reference.update({
+        totalCorrectField: FieldValue.increment(1),
+        consecutiveCorrectField: FieldValue.increment(1),
+      });
+    } else {
+      // Yanlış cevaplandığında
+      int currentConsecutiveCorrect =
+          ingilizce[currentWordIndex].get(consecutiveCorrectField) ?? 0;
+
+      if (currentConsecutiveCorrect > 0) {
+        // Eğer önceki yanıt doğruysa art arda doğru bilinen sayısını sıfırla
+        ingilizce[currentWordIndex].reference.update({
+          consecutiveCorrectField: 0,
+        });
+      }
+
+      // Toplam yanlış sayısını artır
+      ingilizce[currentWordIndex].reference.update({
+        totalWrongField: FieldValue.increment(1),
+      });
+    }
   }
 }
