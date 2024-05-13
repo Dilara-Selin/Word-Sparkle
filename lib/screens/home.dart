@@ -3,16 +3,34 @@ import 'package:last_projectt/customs/custom.elevatedbutton.dart';
 import 'package:last_projectt/screens/addword.dart';
 import 'package:last_projectt/screens/quiz.dart';
 import 'package:last_projectt/screens/settings.dart';
-import 'package:last_projectt/screens/success.dart';
+import 'package:last_projectt/screens/SuccessModulePage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late String _kullaniciId;
+
+  @override
+  void initState() {
+    super.initState();
+    _setKullaniciId();
+  }
+
+  Future<void> _setKullaniciId() async {
+    final User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        _kullaniciId = user.uid;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -65,7 +83,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const SuccessPage(),
+                        builder: (context) =>
+                            SuccessModulePage(kullaniciId: _kullaniciId),
                       ),
                     );
                   },
