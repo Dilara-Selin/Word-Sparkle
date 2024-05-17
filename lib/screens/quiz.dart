@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'constants.dart'; // constants.dart dosyasını ekledik
 
 class Question extends StatefulWidget {
   final double questionCount;
@@ -32,7 +33,7 @@ class _QuestState extends State<Question> {
             .collection('users')
             .doc(kullaniciId)
             .collection('words')
-            .limit(questionCount) // İstenen kadar kelimeyi al
+            .limit(questionCount)
             .get();
         setState(() {
           ingilizce = querySnapshot.docs;
@@ -271,11 +272,6 @@ class _QuestState extends State<Question> {
   }
 
   void _updateCorrectCounts(bool isCorrect) {
-    // Toplam doğru sayısını artır veya sıfırla
-    String totalCorrectField = 'toplamDogru';
-    String consecutiveCorrectField = 'artArdaDogru';
-    String totalWrongField = 'toplamYanlis';
-
     // Doğru sayısını artır veya sıfırla
     if (isCorrect) {
       // Doğru cevaplandığında

@@ -6,6 +6,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'constants.dart'; // Add this import
 
 class SuccessModulePage extends StatelessWidget {
   final GlobalKey<State<StatefulWidget>> _printKey = GlobalKey();
@@ -84,8 +85,8 @@ class SuccessModulePage extends StatelessWidget {
                           var wordData = snapshot.data!.docs[index].data()
                               as Map<String, dynamic>;
 
-                          int correctCount = wordData['totalCorrectField'] ?? 0;
-                          int incorrectCount = wordData['totalWrongField'] ?? 0;
+                          int correctCount = wordData[totalCorrectField] ?? 0;
+                          int incorrectCount = wordData[totalWrongField] ?? 0;
 
                           int totalAttempts = correctCount + incorrectCount;
                           double successRate = totalAttempts != 0
