@@ -6,7 +6,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'constants.dart'; // Add this import
+import 'constants.dart'; // Bu sabitlerin tanımlı olduğundan emin olun
 
 class SuccessModulePage extends StatelessWidget {
   final GlobalKey<State<StatefulWidget>> _printKey = GlobalKey();
@@ -87,6 +87,8 @@ class SuccessModulePage extends StatelessWidget {
 
                           int correctCount = wordData[totalCorrectField] ?? 0;
                           int incorrectCount = wordData[totalWrongField] ?? 0;
+                          int consecutiveCorrect =
+                              wordData['artArdaDogru'] ?? 0;
 
                           int totalAttempts = correctCount + incorrectCount;
                           double successRate = totalAttempts != 0
@@ -97,7 +99,7 @@ class SuccessModulePage extends StatelessWidget {
                             color: Colors.black.withOpacity(0.55),
                             child: ListTile(
                               title: Text(
-                                'Kelime ${index + 1}',
+                                'Kelime: ${wordData['ingilizce']}',
                                 style: TextStyle(
                                   color: Color(0xFFFBE1EF),
                                 ),
@@ -124,7 +126,7 @@ class SuccessModulePage extends StatelessWidget {
                                     ),
                                   ),
                                   Text(
-                                    'En Son Güncelleme: ${wordData['last_update']}',
+                                    'Art Arda Doğru: $consecutiveCorrect',
                                     style: TextStyle(
                                       color: Color(0xFFFBE1EF),
                                     ),
