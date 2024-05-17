@@ -32,10 +32,11 @@ class _QuestState extends State<Question> {
             .collection('users')
             .doc(kullaniciId)
             .collection('words')
-            .limit(questionCount.toInt()) // İstenen kadar kelimeyi al
+            .limit(questionCount) // İstenen kadar kelimeyi al
             .get();
         setState(() {
           ingilizce = querySnapshot.docs;
+          currentWordIndex = 0; // Yeni kelimeler yüklendiğinde başlangıca dön
         });
         print('Words loaded: ${ingilizce.length}');
       } else {
@@ -47,12 +48,14 @@ class _QuestState extends State<Question> {
   }
 
   void _nextWord() {
-    setState(() {
-      currentWordIndex++;
-      if (currentWordIndex >= ingilizce.length) {
-        currentWordIndex = 1;
-      }
-    });
+    if (currentWordIndex < questionCount - 1 &&
+        currentWordIndex < ingilizce.length - 1) {
+      setState(() {
+        currentWordIndex++;
+      });
+    } else {
+      _showQuizFinishedScreen();
+    }
   }
 
   void _loadSettings() async {
@@ -88,13 +91,6 @@ class _QuestState extends State<Question> {
             children: [
               Container(
                 width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color: Color(0xFFFBE1EF),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                  ),
-                ),
                 child: Column(
                   children: [
                     Row(
@@ -139,7 +135,6 @@ class _QuestState extends State<Question> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          SizedBox(height: 10),
                           SizedBox(height: 10),
                           Text(
                             ingilizce.isEmpty ||
@@ -200,8 +195,9 @@ class _QuestState extends State<Question> {
   }
 
   void _checkAnswer(String answer) {
-    if (ingilizce.isEmpty || currentWordIndex >= ingilizce.length) {
-      print('No more words available');
+    if (ingilizce.isEmpty || currentWordIndex >= questionCount) {
+      print('Quiz bitti');
+      _showQuizFinishedScreen();
       return;
     }
 
@@ -245,11 +241,33 @@ class _QuestState extends State<Question> {
       _updateCorrectCounts(false);
     }
 
-    if (currentWordIndex >= questionCount) {
+    if (currentWordIndex >= questionCount - 1) {
       print('Reached question limit');
+      _showQuizFinishedScreen();
       return;
     }
     _nextWord();
+  }
+
+  void _showQuizFinishedScreen() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Quiz Bitti'),
+          content: Text('Tebrikler! Quiz tamamlandı.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop(); // Geri dönme fonksiyonu
+              },
+              child: Text('Kapat'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _updateCorrectCounts(bool isCorrect) {
@@ -266,19 +284,9 @@ class _QuestState extends State<Question> {
         consecutiveCorrectField: FieldValue.increment(1),
       });
     } else {
-      // Yanlış cevaplandığında
-      int currentConsecutiveCorrect =
-          ingilizce[currentWordIndex].get(consecutiveCorrectField) ?? 0;
-
-      if (currentConsecutiveCorrect > 0) {
-        // Eğer önceki yanıt doğruysa art arda doğru bilinen sayısını sıfırla
-        ingilizce[currentWordIndex].reference.update({
-          consecutiveCorrectField: 0,
-        });
-      }
-
-      // Toplam yanlış sayısını artır
+      // Yanlış cevaplandığında ard arda doğru sayısını sıfırla
       ingilizce[currentWordIndex].reference.update({
+        consecutiveCorrectField: 0,
         totalWrongField: FieldValue.increment(1),
       });
     }

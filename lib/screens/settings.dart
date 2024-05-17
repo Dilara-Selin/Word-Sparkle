@@ -14,36 +14,43 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    double deviceHeight = MediaQuery.of(context).size.height;
-    double deviceWidth = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xFFFBE1EF),
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
-                width: deviceWidth,
-                height: deviceHeight / 10,
-                decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 221, 161, 231),
-                ),
-                child: Row(
-                  children: [
-                    IconButton(
+              SizedBox(
+                  height:
+                      20), // Geri okunu biraz daha aşağı almak için boşluk ekliyoruz
+              Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Ayarlar',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: IconButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
                       icon: const Icon(
                         Icons.arrow_back,
                         size: 40,
-                        color: Colors.white,
+                        color: Colors.black, // İkonun rengini siyah yaptık
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 20), // Geri ok ve başlık altına boşluk ekliyoruz
               Text(
                 'Soru Sayısı: $_questionCount',
                 style: TextStyle(fontSize: 20),
