@@ -52,29 +52,24 @@ class _QuestState extends State<Question> {
             .collection('users')
             .doc(kullaniciId)
             .collection('words')
-            .limit(questionCount)
             .get();
 
+        List<DocumentSnapshot> allWords = querySnapshot.docs;
+
+        DateTime now = DateTime.now();
         setState(() {
-          ingilizce = querySnapshot.docs;
+          // Sadece nextTestDate bugünden önce veya bugüne eşit olan kelimeleri filtrele
+          ingilizce = allWords.where((word) {
+            Timestamp? nextTestDate = word.get('nextTestDate');
+            if (nextTestDate != null) {
+              return now.isAfter(nextTestDate.toDate()) ||
+                  now.isAtSameMomentAs(nextTestDate.toDate());
+            }
+            return true; // Eğer nextTestDate yoksa, o kelimeyi dahil et
+          }).toList();
           currentWordIndex = 0; // Yeni kelimeler yüklendiğinde başlangıca dön
         });
         print('Words loaded: ${ingilizce.length}');
-
-        // Her belgeye nextTestDate ekleyin
-        for (DocumentSnapshot wordSnapshot in ingilizce) {
-          if ((wordSnapshot.data() as Map?)?.containsKey('nextTestDate') ??
-              false) {
-            await wordSnapshot.reference.update({
-              'nextTestDate':
-                  Timestamp.now(), // Varsayılan olarak şu anki tarih
-            });
-          }
-        }
-
-        // Artarda doğru cevap alma sayısına göre bir sonraki tarihe kadar beklet
-        await Future.delayed(calculateNextDate(
-            ingilizce[currentWordIndex].get(consecutiveCorrectField) ?? 0));
       } else {
         print('User ID is null');
       }
@@ -90,25 +85,26 @@ class _QuestState extends State<Question> {
         currentWordIndex++;
         answerController.clear();
       });
+
+      // Tarihe göre bir sonraki kelimeye geç
+      DocumentSnapshot nextWord = ingilizce[currentWordIndex];
+      Timestamp? nextTestDate = nextWord.get('nextTestDate');
+      DateTime now = DateTime.now();
+
+      if (nextTestDate != null && now.isBefore(nextTestDate.toDate())) {
+        // Test tarihi gelmedi, bir sonraki kelimeye geç
+        _nextWord();
+        return;
+      }
+
+      // Test tarihi geldi, yeni soruyu göster
+      setState(() {
+        // Diğer işlemler...
+      });
     } else {
       _showQuizFinishedScreen();
       return;
     }
-
-    // Tarihe göre bir sonraki kelimeye geç
-    DocumentSnapshot nextWord = ingilizce[currentWordIndex];
-    Timestamp? nextTestDate = nextWord['nextTestDate']; // Düzeltildi
-    DateTime now = DateTime.now();
-    if (nextTestDate != null && now.isBefore(nextTestDate.toDate())) {
-      // Test tarihi gelmedi, bir sonraki kelimeye geç
-      _nextWord();
-      return;
-    }
-
-    // Test tarihi geldi, yeni soruyu göster
-    setState(() {
-      // Diğer işlemler...
-    });
   }
 
   void _loadSettings() async {
@@ -294,12 +290,8 @@ class _QuestState extends State<Question> {
       _updateCorrectCounts(false);
     }
 
-    // Test tarihini kontrol et
-    if (!isTestDateValid()) {
-      print('Günlük sorularınız bitmiştir');
-      _showDailyQuestionsFinishedMessage();
-      return;
-    }
+    // Doğru cevaplanan veya yanlış cevaplanan kelimenin test tarihini güncelle
+    _updateTestDate();
 
     if (currentWordIndex >= questionCount - 1) {
       print('Reached question limit');
@@ -307,6 +299,30 @@ class _QuestState extends State<Question> {
       return;
     }
     _nextWord();
+  }
+
+  void _updateTestDate() async {
+    try {
+      DocumentSnapshot wordSnapshot = ingilizce[currentWordIndex];
+      int consecutiveCorrect = wordSnapshot.get(consecutiveCorrectField) ?? 0;
+
+      // Doğru cevaplandığında, bir sonraki test tarihini hesapla
+      Duration nextTestDuration = calculateNextDate(consecutiveCorrect);
+
+      // Yeni test tarihini hesapla ve Firebase'e kaydet
+      DateTime now = DateTime.now();
+      DateTime nextTestDate = now.add(nextTestDuration);
+
+      // Güncellenen tarihi şu anki zamana ayarla
+      Timestamp timestamp = Timestamp.fromDate(nextTestDate);
+
+      // Kullanıcıya ait kelimenin referansını alın ve nextTestDate alanını güncelleyin
+      await wordSnapshot.reference.update({
+        'nextTestDate': timestamp,
+      });
+    } catch (error) {
+      print('Test tarihi güncellenirken bir hata oluştu: $error');
+    }
   }
 
   bool isTestDateValid() {

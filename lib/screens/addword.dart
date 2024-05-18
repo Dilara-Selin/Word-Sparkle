@@ -67,6 +67,8 @@ class _AddWordState extends State<AddWord> {
           'ingilizce': ingilizceController.text,
           'cumle': cumleController.text,
           'imageUrl': _imageUrl,
+          'nextTestDate': Timestamp.now(), // Varsayılan olarak şu anki tarih
+          'addedDate': Timestamp.now(), // Kelimenin eklendiği tarih
         };
 
         await wordsRef.add(kelimeData);
@@ -222,11 +224,11 @@ class _AddWordState extends State<AddWord> {
                   await addDataToFirestore();
 
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const HomeScreen(),
-                      ),
-                    );
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const HomeScreen(),
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(200, 50),
@@ -236,8 +238,7 @@ class _AddWordState extends State<AddWord> {
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.white,
-                    )
-                    ),
+                    )),
               ),
             ),
           ],
