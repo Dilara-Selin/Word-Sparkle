@@ -24,6 +24,25 @@ class _QuestState extends State<Question> {
     _loadSettings();
   }
 
+  Duration calculateNextDate(int consecutiveCorrectCount) {
+    switch (consecutiveCorrectCount) {
+      case 0:
+        return Duration.zero; // Aynı gün
+      case 1:
+        return Duration(days: 1); // Bir sonraki gün
+      case 2:
+        return Duration(days: 7); // Bir hafta sonra
+      case 3:
+        return Duration(days: 30); // 1 ay sonra
+      case 4:
+        return Duration(days: 90); // 3 ay sonra
+      case 6:
+        return Duration(days: 180); // 6 ay sonra
+      default:
+        return Duration.zero; // Varsayılan olarak aynı gün
+    }
+  }
+
   void _loadWords() async {
     try {
       String? kullaniciId = FirebaseAuth.instance.currentUser?.uid;
@@ -35,11 +54,27 @@ class _QuestState extends State<Question> {
             .collection('words')
             .limit(questionCount)
             .get();
+
         setState(() {
           ingilizce = querySnapshot.docs;
           currentWordIndex = 0; // Yeni kelimeler yüklendiğinde başlangıca dön
         });
         print('Words loaded: ${ingilizce.length}');
+
+        // Her belgeye nextTestDate ekleyin
+        for (DocumentSnapshot wordSnapshot in ingilizce) {
+          if ((wordSnapshot.data() as Map?)?.containsKey('nextTestDate') ??
+              false) {
+            await wordSnapshot.reference.update({
+              'nextTestDate':
+                  Timestamp.now(), // Varsayılan olarak şu anki tarih
+            });
+          }
+        }
+
+        // Artarda doğru cevap alma sayısına göre bir sonraki tarihe kadar beklet
+        await Future.delayed(calculateNextDate(
+            ingilizce[currentWordIndex].get(consecutiveCorrectField) ?? 0));
       } else {
         print('User ID is null');
       }
@@ -53,10 +88,27 @@ class _QuestState extends State<Question> {
         currentWordIndex < ingilizce.length - 1) {
       setState(() {
         currentWordIndex++;
+        answerController.clear();
       });
     } else {
       _showQuizFinishedScreen();
+      return;
     }
+
+    // Tarihe göre bir sonraki kelimeye geç
+    DocumentSnapshot nextWord = ingilizce[currentWordIndex];
+    Timestamp? nextTestDate = nextWord['nextTestDate']; // Düzeltildi
+    DateTime now = DateTime.now();
+    if (nextTestDate != null && now.isBefore(nextTestDate.toDate())) {
+      // Test tarihi gelmedi, bir sonraki kelimeye geç
+      _nextWord();
+      return;
+    }
+
+    // Test tarihi geldi, yeni soruyu göster
+    setState(() {
+      // Diğer işlemler...
+    });
   }
 
   void _loadSettings() async {
@@ -242,12 +294,49 @@ class _QuestState extends State<Question> {
       _updateCorrectCounts(false);
     }
 
+    // Test tarihini kontrol et
+    if (!isTestDateValid()) {
+      print('Günlük sorularınız bitmiştir');
+      _showDailyQuestionsFinishedMessage();
+      return;
+    }
+
     if (currentWordIndex >= questionCount - 1) {
       print('Reached question limit');
       _showQuizFinishedScreen();
       return;
     }
     _nextWord();
+  }
+
+  bool isTestDateValid() {
+    // Burada, kullanıcının test tarihini kontrol edin ve geçerli olup olmadığını döndürün
+    // Örneğin, Firebase'den test tarihini alıp geçerli tarihe karşı kontrol edebilirsiniz.
+    // Örneğin:
+    // DateTime testDate = getTestDateFromFirebase(); // Firebase'den test tarihini al
+    // return DateTime.now().isBefore(testDate); // Şu anki tarih, test tarihinden önce mi kontrol et
+    return true; // Geçici olarak her zaman geçerli olduğunu varsayalım
+  }
+
+  void _showDailyQuestionsFinishedMessage() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Günlük Sorularınız Bitmiştir'),
+          content: Text('Günlük sorularınız için test tarihi geçmiştir.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop(); // Ana ekrana dön
+              },
+              child: Text('Ana Ekrana Dön'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _showQuizFinishedScreen() {
@@ -271,20 +360,96 @@ class _QuestState extends State<Question> {
     );
   }
 
-  void _updateCorrectCounts(bool isCorrect) {
-    // Doğru sayısını artır veya sıfırla
-    if (isCorrect) {
-      // Doğru cevaplandığında
-      ingilizce[currentWordIndex].reference.update({
-        totalCorrectField: FieldValue.increment(1),
-        consecutiveCorrectField: FieldValue.increment(1),
-      });
-    } else {
-      // Yanlış cevaplandığında ard arda doğru sayısını sıfırla
-      ingilizce[currentWordIndex].reference.update({
-        consecutiveCorrectField: 0,
-        totalWrongField: FieldValue.increment(1),
-      });
+  void _updateCorrectCounts(bool isCorrect) async {
+    try {
+      DocumentSnapshot wordSnapshot = ingilizce[currentWordIndex];
+
+      // wordSnapshot.data()'yı Map<String, dynamic> olarak cast edin
+      Map<String, dynamic>? data = wordSnapshot.data() as Map<String, dynamic>?;
+
+      if (data == null) {
+        print('Veri alınamadı.');
+        return;
+      }
+
+      // Eğer artArdaDogru alanı yoksa, sıfır olarak başlatın
+      if (!data.containsKey(consecutiveCorrectField)) {
+        await wordSnapshot.reference.update({
+          consecutiveCorrectField: 0,
+        });
+      }
+
+      if (isCorrect) {
+        int consecutiveCorrect = data[consecutiveCorrectField] ?? 0;
+        consecutiveCorrect++;
+        await wordSnapshot.reference.update({
+          totalCorrectField: FieldValue.increment(1),
+          consecutiveCorrectField: consecutiveCorrect,
+        });
+
+        if (consecutiveCorrect >= 6) {
+          await _moveWordToKnownWords(); // Kelimeyi bilinen kelimeler havuzuna taşı
+        }
+      } else {
+        await wordSnapshot.reference.update({
+          consecutiveCorrectField: 0,
+          totalWrongField: FieldValue.increment(1),
+        });
+      }
+
+      // Son doğru tarihi güncelle
+      await updateLastCorrectDate(wordSnapshot.reference);
+    } catch (error) {
+      print('Doğru sayısı güncellenirken bir hata oluştu: $error');
+    }
+  }
+
+  Future<void> updateLastCorrectDate(DocumentReference wordRef) async {
+    try {
+      String? kullaniciId = FirebaseAuth.instance.currentUser?.uid;
+      if (kullaniciId != null) {
+        // Güncellenen tarihi şu anki zamana ayarla
+        DateTime now = DateTime.now();
+        Timestamp timestamp = Timestamp.fromDate(now);
+
+        // Kullanıcıya ait kelimenin referansını alın ve lastCorrectDate alanını güncelleyin
+        await wordRef.update({
+          'lastCorrectDate': timestamp,
+        });
+      } else {
+        print('Kullanıcı oturumu açmamış.');
+      }
+    } catch (error) {
+      print('Son doğru tarihi güncellenirken bir hata oluştu: $error');
+    }
+  }
+
+  Future<void> _moveWordToKnownWords() async {
+    try {
+      DocumentSnapshot wordSnapshot = ingilizce[currentWordIndex];
+
+      // Kullanıcının UID'sini alın
+      String? kullaniciId = FirebaseAuth.instance.currentUser?.uid;
+      if (kullaniciId != null) {
+        // Kullanıcının bilinen kelimeler koleksiyonunu oluşturun
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(kullaniciId)
+            .collection('known_words')
+            .add({
+          'ingilizce': wordSnapshot.get('ingilizce'),
+          'turkce': wordSnapshot.get('turkce'),
+          // Diğer alanlar...
+        });
+
+        // Kelimeyi orijinal koleksiyondan silme
+        await wordSnapshot.reference.delete();
+        print('Kelime bilinen kelimeler havuzuna taşındı.');
+      } else {
+        print('Kullanıcı oturumu açmamış.');
+      }
+    } catch (error) {
+      print('Kelime taşınırken bir hata oluştu: $error');
     }
   }
 }

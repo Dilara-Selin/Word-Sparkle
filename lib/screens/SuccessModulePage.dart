@@ -6,6 +6,8 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
+
 import 'constants.dart'; // Bu sabitlerin tanımlı olduğundan emin olun
 
 class SuccessModulePage extends StatelessWidget {
@@ -66,6 +68,37 @@ class SuccessModulePage extends StatelessWidget {
             return Center(child: CircularProgressIndicator());
           }
 
+          // Grafiğe veri hazırlama
+          var data = snapshot.data!.docs;
+          Map<int, int> consecutiveCorrectCounts = {
+            1: 0,
+            2: 0,
+            3: 0,
+            4: 0,
+            5: 0
+          };
+
+          data.forEach((doc) {
+            var wordData = doc.data() as Map<String, dynamic>;
+            int consecutiveCorrect = wordData['artArdaDogru'] ?? 0;
+            if (consecutiveCorrectCounts.containsKey(consecutiveCorrect)) {
+              consecutiveCorrectCounts[consecutiveCorrect] =
+                  consecutiveCorrectCounts[consecutiveCorrect]! + 1;
+            }
+          });
+
+          List<charts.Series<ConsecutiveCorrectData, String>> series = [
+            charts.Series(
+                id: 'ConsecutiveCorrect',
+                data: consecutiveCorrectCounts.entries
+                    .map((entry) =>
+                        ConsecutiveCorrectData(entry.key, entry.value))
+                    .toList(),
+                domainFn: (ConsecutiveCorrectData data, _) => '${data.count}',
+                measureFn: (ConsecutiveCorrectData data, _) => data.frequency,
+                colorFn: (_, __) => charts.MaterialPalette.gray.shade800)
+          ];
+
           return SingleChildScrollView(
             child: Column(
               children: [
@@ -77,6 +110,14 @@ class SuccessModulePage extends StatelessWidget {
                   key: _printKey,
                   child: Column(
                     children: [
+                      Container(
+                        height: 300,
+                        padding: EdgeInsets.all(16),
+                        child: charts.BarChart(
+                          series,
+                          animate: true,
+                        ),
+                      ),
                       ListView.builder(
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
@@ -170,6 +211,13 @@ class SuccessModulePage extends StatelessWidget {
       return null;
     }
   }
+}
+
+class ConsecutiveCorrectData {
+  final int count;
+  final int frequency;
+
+  ConsecutiveCorrectData(this.count, this.frequency);
 }
 
 void main() {
