@@ -85,7 +85,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   void _saveQuestionCount(double questionCount) async {
     try {
-      String? kullaniciId = FirebaseAuth.instance.currentUser?.uid;
+      var kullaniciId = FirebaseAuth.instance.currentUser?.uid;
       await FirebaseFirestore.instance
           .collection('users')
           .doc(kullaniciId)

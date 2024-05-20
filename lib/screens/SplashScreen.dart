@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:flutter/services.dart'; // Görüntü yüklemek için gerekli
 import 'package:last_projectt/screens/login.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -13,22 +11,27 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  late Future<Uint8List> _imageFuture;
+
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 5), () {
+    _imageFuture = _loadAsset('images/logo.png');
+    Timer(const Duration(seconds: 1, milliseconds: 30), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => LoginPage()),
       );
     });
   }
 
-  Future<Uint8List> _getImage(BuildContext context, String imageName) async {
-    final firebase_storage.Reference ref =
-        firebase_storage.FirebaseStorage.instance.ref().child(imageName);
-    final String downloadURL = await ref.getDownloadURL();
-    final http.Response downloadData = await http.get(Uri.parse(downloadURL));
-    return downloadData.bodyBytes;
+  Future<Uint8List> _loadAsset(String path) async {
+    try {
+      final data = await rootBundle.load(path);
+      return data.buffer.asUint8List();
+    } catch (e) {
+      print('Error loading image: $e');
+      rethrow;
+    }
   }
 
   @override
@@ -40,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             FutureBuilder<Uint8List>(
-              future: _getImage(context, 'Word Sparkle.png'),
+              future: _imageFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {
@@ -58,11 +61,17 @@ class _SplashScreenState extends State<SplashScreen> {
                       style: TextStyle(color: Colors.white),
                     );
                   }
-                }
-                if (snapshot.connectionState == ConnectionState.waiting) {
+                } else if (snapshot.connectionState ==
+                    ConnectionState.waiting) {
                   return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text(
+                    'Error loading image',
+                    style: TextStyle(color: Colors.red),
+                  );
+                } else {
+                  return Container(); // Hata durumları için boş bir konteyner döndürün
                 }
-                return Container(); // Hata durumları için boş bir konteyner döndürün
               },
             ),
             const SizedBox(height: 20),

@@ -22,7 +22,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       await FirebaseAuth.instance.sendPasswordResetEmail(
         email: _emailController.text.trim(),
       );
-      showDialog(
+      await showDialog(
         context: context,
         builder: (context) {
           return const AlertDialog(
@@ -34,7 +34,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       );
     } on FirebaseAuthException catch (e) {
       print(e);
-      showDialog(
+      await showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
@@ -59,7 +59,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               children: [
                 const SizedBox(height: 130),
                 const Text(
-                  "Şifremi Unuttum \n\nŞifrenizi size e-posta yoluyla gönderebilmemiz için e-posta adresinizi giriniz.",
+                  'Şifremi Unuttum \n\nŞifrenizi size e-posta yoluyla gönderebilmemiz için e-posta adresinizi giriniz.',
                   style: TextStyle(
                     fontSize: 20,
                     color: Color(0xff31274F),
@@ -70,7 +70,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   controller: _emailController,
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return "Bilgileri Eksiksiz Doldurunuz.";
+                      return 'Bilgileri Eksiksiz Doldurunuz.';
                     } else {
                       return null; // Değer boş değilse null döndür
                     }
@@ -93,7 +93,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       ),
                       child: const Center(
                         child: Text(
-                          "Gönder",
+                          'Gönder',
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
@@ -106,10 +106,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   child: Center(
                     child: TextButton(
                       onPressed: () {
-                        Navigator.pushReplacementNamed(context, "/loginPage");
+                        Navigator.pushReplacementNamed(context, '/loginPage');
                       },
                       child: const Text(
-                        "Giriş Yap",
+                        'Giriş Yap',
                         style: TextStyle(color: Color(0xff31274F)),
                       ),
                     ),

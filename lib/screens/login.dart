@@ -34,7 +34,7 @@ class LoginPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        "Merhaba, Hoşgeldiniz",
+                        'Merhaba, Hoşgeldiniz',
                         style: TextStyle(
                           fontSize: 30,
                           color: Color(0xff31274F),
@@ -53,7 +53,7 @@ class LoginPage extends StatelessWidget {
                               builder: (context) => const ForgotPassword(),
                             ),
                           ),
-                          buttonText: "Şifremi Unuttum",
+                          buttonText: 'Şifremi Unuttum',
                         ),
                       ),
                       const SizedBox(
@@ -69,7 +69,7 @@ class LoginPage extends StatelessWidget {
                                   email: email,
                                   password: password,
                                 );
-                                Navigator.push(
+                                await Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => const HomeScreen(),
@@ -90,7 +90,7 @@ class LoginPage extends StatelessWidget {
                             ),
                             child: const Center(
                               child: Text(
-                                "Giriş Yap",
+                                'Giriş Yap',
                                 style: TextStyle(color: Colors.white),
                               ),
                             ),
@@ -106,7 +106,7 @@ class LoginPage extends StatelessWidget {
                               builder: (context) => const SignupPage(),
                             ),
                           ),
-                          buttonText: "Hesap Oluştur",
+                          buttonText: 'Hesap Oluştur',
                         ),
                       ),
                       const SizedBox(
@@ -117,13 +117,13 @@ class LoginPage extends StatelessWidget {
                           onPressed: () async {
                             final result = await authService.signInAnonymous();
                             if (result != null) {
-                              Navigator.pushReplacementNamed(
-                                  context, "/homePage");
+                              await Navigator.pushReplacementNamed(
+                                  context, '/homePage');
                             } else {
-                              print("Hata ile karşılaşıldı");
+                              print('Hata ile karşılaşıldı');
                             }
                           },
-                          buttonText: "Misafir Girişi",
+                          buttonText: 'Misafir Girişi',
                         ),
                       ),
                     ],
@@ -141,14 +141,14 @@ class LoginPage extends StatelessWidget {
     return TextFormField(
       validator: (value) {
         if (value!.isEmpty) {
-          return "Bilgileri Eksiksiz Doldurunuz";
+          return 'Bilgileri Eksiksiz Doldurunuz';
         }
         return null;
       },
       onSaved: (value) {
         email = value!;
       },
-      decoration: customInputDecoration("Email"),
+      decoration: customInputDecoration('Email'),
     );
   }
 
@@ -156,14 +156,14 @@ class LoginPage extends StatelessWidget {
     return TextFormField(
       validator: (value) {
         if (value!.isEmpty) {
-          return "Bilgileri eksiksiz giriniz";
+          return 'Bilgileri eksiksiz giriniz';
         }
         return null;
       },
       onSaved: (value) {
         password = value!;
       },
-      decoration: customInputDecoration("Şifre"),
+      decoration: customInputDecoration('Şifre'),
     );
   }
 

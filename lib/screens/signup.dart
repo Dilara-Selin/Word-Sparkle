@@ -57,7 +57,7 @@ class _SignupPageState extends State<SignupPage> {
 
   Text titleText() {
     return const Text(
-      "Merhaba, Hoşgeldiniz",
+      'Merhaba, Hoşgeldiniz',
       style: TextStyle(
         fontSize: 30,
         color: Color(0xff31274F),
@@ -81,10 +81,11 @@ class _SignupPageState extends State<SignupPage> {
               formkey.currentState!.reset();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text("Kayıt yapıldı, Giriş sayfasına yönlendiriliyorsunuz"),
+                  content: Text(
+                      'Kayıt yapıldı, Giriş sayfasına yönlendiriliyorsunuz'),
                 ),
               );
-              Navigator.pushReplacementNamed(context, "/loginPage");
+              await Navigator.pushReplacementNamed(context, '/loginPage');
             } catch (e) {
               print(e.toString());
             }
@@ -100,7 +101,7 @@ class _SignupPageState extends State<SignupPage> {
           ),
           child: const Center(
             child: Text(
-              "Hesap Oluştur",
+              'Hesap Oluştur',
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -119,7 +120,7 @@ class _SignupPageState extends State<SignupPage> {
           );
         },
         child: const Text(
-          "Giriş Yap",
+          'Giriş Yap',
           style: TextStyle(color: Color(0xff31274F)),
         ),
       ),
@@ -130,14 +131,14 @@ class _SignupPageState extends State<SignupPage> {
     return TextFormField(
       validator: (value) {
         if (value!.isEmpty) {
-          return "Bilgileri Eksiksiz Doldurunuz";
+          return 'Bilgileri Eksiksiz Doldurunuz';
         }
         return null;
       },
       onSaved: (value) {
         userName = value!;
       },
-      decoration: customInputDecoration("user name"),
+      decoration: customInputDecoration('user name'),
     );
   }
 
@@ -145,14 +146,14 @@ class _SignupPageState extends State<SignupPage> {
     return TextFormField(
       validator: (value) {
         if (value!.isEmpty) {
-          return "Bilgileri eksiksiz giriniz";
+          return 'Bilgileri eksiksiz giriniz';
         }
         return null;
       },
       onSaved: (value) {
         email = value!;
       },
-      decoration: customInputDecoration("email"),
+      decoration: customInputDecoration('email'),
     );
   }
 
@@ -160,14 +161,14 @@ class _SignupPageState extends State<SignupPage> {
     return TextFormField(
       validator: (value) {
         if (value!.isEmpty) {
-          return "Bilgileri eksiksiz giriniz";
+          return 'Bilgileri eksiksiz giriniz';
         }
         return null;
       },
       onSaved: (value) {
         password = value!;
       },
-      decoration: customInputDecoration("password"),
+      decoration: customInputDecoration('password'),
     );
   }
 

@@ -1,5 +1,9 @@
+// ignore_for_file: prefer_adjacent_string_concatenation
+
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:rxdart/rxdart.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -31,11 +35,11 @@ class SuccessModulePage extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.print),
             onPressed: () async {
-              Uint8List? result = await _captureAndConvertToPdf(context);
+              var result = await _captureAndConvertToPdf(context);
               if (result != null) {
-                Printing.layoutPdf(onLayout: (_) => result);
+                await Printing.layoutPdf(onLayout: (_) => result);
               } else {
-                showDialog(
+                await showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
                     title: Text('PDF Oluşturma Hatası'),
@@ -53,13 +57,21 @@ class SuccessModulePage extends StatelessWidget {
           ),
         ],
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('users')
-            .doc(kullaniciId)
-            .collection('words')
-            .snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+      body: StreamBuilder<List<QuerySnapshot>>(
+        stream: CombineLatestStream.list([
+          FirebaseFirestore.instance
+              .collection('users')
+              .doc(kullaniciId)
+              .collection('words')
+              .snapshots(),
+          FirebaseFirestore.instance
+              .collection('users')
+              .doc(kullaniciId)
+              .collection('known_words')
+              .snapshots(),
+        ]),
+        builder: (BuildContext context,
+            AsyncSnapshot<List<QuerySnapshot>> snapshot) {
           if (snapshot.hasError) {
             return Center(child: Text('Veri alınamadı: ${snapshot.error}'));
           }
@@ -68,17 +80,23 @@ class SuccessModulePage extends StatelessWidget {
             return Center(child: CircularProgressIndicator());
           }
 
+          var wordsSnapshot = snapshot.data![0];
+          var knownWordsSnapshot = snapshot.data![1];
+
           // Grafiğe veri hazırlama
-          var data = snapshot.data!.docs;
-          Map<int, int> consecutiveCorrectCounts = {
+          var wordsData = wordsSnapshot.docs;
+          var knownWordsData = knownWordsSnapshot.docs;
+
+          var consecutiveCorrectCounts = <int, int>{
             1: 0,
             2: 0,
             3: 0,
             4: 0,
             5: 0
           };
+          var knownWordsCount = knownWordsData.length;
 
-          data.forEach((doc) {
+          wordsData.forEach((doc) {
             var wordData = doc.data() as Map<String, dynamic>;
             int consecutiveCorrect = wordData['artArdaDogru'] ?? 0;
             if (consecutiveCorrectCounts.containsKey(consecutiveCorrect)) {
@@ -87,16 +105,25 @@ class SuccessModulePage extends StatelessWidget {
             }
           });
 
-          List<charts.Series<ConsecutiveCorrectData, String>> series = [
+          var series = <charts.Series<ConsecutiveCorrectData, String>>[
             charts.Series(
-                id: 'ConsecutiveCorrect',
-                data: consecutiveCorrectCounts.entries
-                    .map((entry) =>
-                        ConsecutiveCorrectData(entry.key, entry.value))
-                    .toList(),
-                domainFn: (ConsecutiveCorrectData data, _) => '${data.count}',
-                measureFn: (ConsecutiveCorrectData data, _) => data.frequency,
-                colorFn: (_, __) => charts.MaterialPalette.gray.shade800)
+              id: 'ConsecutiveCorrect',
+              data: consecutiveCorrectCounts.entries
+                  .map(
+                      (entry) => ConsecutiveCorrectData(entry.key, entry.value))
+                  .toList(),
+              domainFn: (ConsecutiveCorrectData data, _) =>
+                  '${data.count}' + '.seviye',
+              measureFn: (ConsecutiveCorrectData data, _) => data.frequency,
+              colorFn: (_, __) => charts.MaterialPalette.gray.shade800,
+            ),
+            charts.Series(
+              id: 'KnownWords',
+              data: [ConsecutiveCorrectData(0, knownWordsCount)],
+              domainFn: (ConsecutiveCorrectData data, _) => 'Bilinen Kelimeler',
+              measureFn: (ConsecutiveCorrectData data, _) => data.frequency,
+              colorFn: (_, __) => charts.MaterialPalette.black,
+            ),
           ];
 
           return SingleChildScrollView(
@@ -121,9 +148,9 @@ class SuccessModulePage extends StatelessWidget {
                       ListView.builder(
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
-                        itemCount: snapshot.data!.docs.length,
+                        itemCount: wordsSnapshot.docs.length,
                         itemBuilder: (context, index) {
-                          var wordData = snapshot.data!.docs[index].data()
+                          var wordData = wordsSnapshot.docs[index].data()
                               as Map<String, dynamic>;
 
                           int correctCount = wordData[totalCorrectField] ?? 0;
@@ -131,8 +158,8 @@ class SuccessModulePage extends StatelessWidget {
                           int consecutiveCorrect =
                               wordData['artArdaDogru'] ?? 0;
 
-                          int totalAttempts = correctCount + incorrectCount;
-                          double successRate = totalAttempts != 0
+                          var totalAttempts = correctCount + incorrectCount;
+                          var successRate = totalAttempts != 0
                               ? (correctCount / totalAttempts) * 100
                               : 0.0;
 
@@ -193,12 +220,11 @@ class SuccessModulePage extends StatelessWidget {
 
   Future<Uint8List?> _captureAndConvertToPdf(BuildContext context) async {
     try {
-      RenderRepaintBoundary boundary =
+      var boundary =
           _printKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-      ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-      ByteData? byteData =
-          await image.toByteData(format: ui.ImageByteFormat.png);
-      Uint8List pngBytes = byteData!.buffer.asUint8List();
+      var image = await boundary.toImage(pixelRatio: 3.0);
+      var byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      var pngBytes = byteData!.buffer.asUint8List();
 
       final pdf = pw.Document();
       pdf.addPage(pw.Page(
@@ -207,7 +233,7 @@ class SuccessModulePage extends StatelessWidget {
       Uint8List? result = await pdf.save();
       return result;
     } catch (e) {
-      print("PDF oluşturma hatası: $e");
+      print('PDF oluşturma hatası: $e');
       return null;
     }
   }
@@ -238,8 +264,8 @@ class MyApp extends StatelessWidget {
           return Text('Bir hata oluştu: ${snapshot.error}');
         }
         if (snapshot.hasData && snapshot.data != null) {
-          User user = snapshot.data!;
-          String kullaniciId = user.uid;
+          var user = snapshot.data!;
+          var kullaniciId = user.uid;
           return MaterialApp(
             home: SuccessModulePage(kullaniciId: kullaniciId),
           );

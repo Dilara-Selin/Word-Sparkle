@@ -45,7 +45,7 @@ class _QuestState extends State<Question> {
 
   void _loadWords() async {
     try {
-      String? kullaniciId = FirebaseAuth.instance.currentUser?.uid;
+      var kullaniciId = FirebaseAuth.instance.currentUser?.uid;
 
       if (kullaniciId != null) {
         QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -56,7 +56,7 @@ class _QuestState extends State<Question> {
 
         List<DocumentSnapshot> allWords = querySnapshot.docs;
 
-        DateTime now = DateTime.now();
+        var now = DateTime.now();
         setState(() {
           // Sadece nextTestDate bugünden önce veya bugüne eşit olan kelimeleri filtrele
           ingilizce = allWords.where((word) {
@@ -87,9 +87,9 @@ class _QuestState extends State<Question> {
       });
 
       // Tarihe göre bir sonraki kelimeye geç
-      DocumentSnapshot nextWord = ingilizce[currentWordIndex];
+      var nextWord = ingilizce[currentWordIndex];
       Timestamp? nextTestDate = nextWord.get('nextTestDate');
-      DateTime now = DateTime.now();
+      var now = DateTime.now();
 
       if (nextTestDate != null && now.isBefore(nextTestDate.toDate())) {
         // Test tarihi gelmedi, bir sonraki kelimeye geç
@@ -109,7 +109,7 @@ class _QuestState extends State<Question> {
 
   void _loadSettings() async {
     try {
-      String? kullaniciId = FirebaseAuth.instance.currentUser?.uid;
+      var kullaniciId = FirebaseAuth.instance.currentUser?.uid;
       DocumentSnapshot settingsDoc = await FirebaseFirestore.instance
           .collection('users')
           .doc(kullaniciId)
@@ -236,6 +236,7 @@ class _QuestState extends State<Question> {
     }
     // Varsayılan bir resim göster
     return Image.asset(
+      // ignore: prefer_single_quotes
       "images/beyaz.jpg",
       height: 250,
       width: MediaQuery.of(context).size.width,
@@ -303,18 +304,18 @@ class _QuestState extends State<Question> {
 
   void _updateTestDate() async {
     try {
-      DocumentSnapshot wordSnapshot = ingilizce[currentWordIndex];
+      var wordSnapshot = ingilizce[currentWordIndex];
       int consecutiveCorrect = wordSnapshot.get(consecutiveCorrectField) ?? 0;
 
       // Doğru cevaplandığında, bir sonraki test tarihini hesapla
-      Duration nextTestDuration = calculateNextDate(consecutiveCorrect);
+      var nextTestDuration = calculateNextDate(consecutiveCorrect);
 
       // Yeni test tarihini hesapla ve Firebase'e kaydet
-      DateTime now = DateTime.now();
-      DateTime nextTestDate = now.add(nextTestDuration);
+      var now = DateTime.now();
+      var nextTestDate = now.add(nextTestDuration);
 
       // Güncellenen tarihi şu anki zamana ayarla
-      Timestamp timestamp = Timestamp.fromDate(nextTestDate);
+      var timestamp = Timestamp.fromDate(nextTestDate);
 
       // Kullanıcıya ait kelimenin referansını alın ve nextTestDate alanını güncelleyin
       await wordSnapshot.reference.update({
@@ -332,27 +333,6 @@ class _QuestState extends State<Question> {
     // DateTime testDate = getTestDateFromFirebase(); // Firebase'den test tarihini al
     // return DateTime.now().isBefore(testDate); // Şu anki tarih, test tarihinden önce mi kontrol et
     return true; // Geçici olarak her zaman geçerli olduğunu varsayalım
-  }
-
-  void _showDailyQuestionsFinishedMessage() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Günlük Sorularınız Bitmiştir'),
-          content: Text('Günlük sorularınız için test tarihi geçmiştir.'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pop(); // Ana ekrana dön
-              },
-              child: Text('Ana Ekrana Dön'),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   void _showQuizFinishedScreen() {
@@ -378,10 +358,10 @@ class _QuestState extends State<Question> {
 
   void _updateCorrectCounts(bool isCorrect) async {
     try {
-      DocumentSnapshot wordSnapshot = ingilizce[currentWordIndex];
+      var wordSnapshot = ingilizce[currentWordIndex];
 
       // wordSnapshot.data()'yı Map<String, dynamic> olarak cast edin
-      Map<String, dynamic>? data = wordSnapshot.data() as Map<String, dynamic>?;
+      var data = wordSnapshot.data() as Map<String, dynamic>?;
 
       if (data == null) {
         print('Veri alınamadı.');
@@ -422,11 +402,11 @@ class _QuestState extends State<Question> {
 
   Future<void> updateLastCorrectDate(DocumentReference wordRef) async {
     try {
-      String? kullaniciId = FirebaseAuth.instance.currentUser?.uid;
+      var kullaniciId = FirebaseAuth.instance.currentUser?.uid;
       if (kullaniciId != null) {
         // Güncellenen tarihi şu anki zamana ayarla
-        DateTime now = DateTime.now();
-        Timestamp timestamp = Timestamp.fromDate(now);
+        var now = DateTime.now();
+        var timestamp = Timestamp.fromDate(now);
 
         // Kullanıcıya ait kelimenin referansını alın ve lastCorrectDate alanını güncelleyin
         await wordRef.update({
@@ -442,10 +422,10 @@ class _QuestState extends State<Question> {
 
   Future<void> _moveWordToKnownWords() async {
     try {
-      DocumentSnapshot wordSnapshot = ingilizce[currentWordIndex];
+      var wordSnapshot = ingilizce[currentWordIndex];
 
       // Kullanıcının UID'sini alın
-      String? kullaniciId = FirebaseAuth.instance.currentUser?.uid;
+      var kullaniciId = FirebaseAuth.instance.currentUser?.uid;
       if (kullaniciId != null) {
         // Kullanıcının bilinen kelimeler koleksiyonunu oluşturun
         await FirebaseFirestore.instance
@@ -455,6 +435,10 @@ class _QuestState extends State<Question> {
             .add({
           'ingilizce': wordSnapshot.get('ingilizce'),
           'turkce': wordSnapshot.get('turkce'),
+          'cumle': wordSnapshot.get('cumle'),
+          'imageUrl': wordSnapshot.get('imageUrl'),
+          'addedDate': wordSnapshot.get('addedDate'),
+
           // Diğer alanlar...
         });
 

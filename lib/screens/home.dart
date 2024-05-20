@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _setKullaniciId() async {
-    final User? user = FirebaseAuth.instance.currentUser;
+    final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       setState(() {
         _kullaniciId = user.uid;
@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const Padding(
                 padding: EdgeInsets.only(top: 50),
                 child: Text(
-                  "WORD SPARKLE",
+                  'WORD SPARKLE',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 40,
@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       MaterialPageRoute(builder: (context) => const AddWord()),
                     );
                   },
-                  content: "Kelime Ekle",
+                  content: 'Kelime Ekle',
                 ),
               ),
               Padding(
@@ -73,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               const Question(questionCount: 10)),
                     );
                   },
-                  content: "Quiz",
+                  content: 'Quiz',
                 ),
               ),
               Padding(
@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     );
                   },
-                  content: "Başarı İstatistiği",
+                  content: 'Başarı İstatistiği',
                 ),
               ),
               Row(

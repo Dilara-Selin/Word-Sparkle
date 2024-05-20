@@ -32,37 +32,37 @@ class _AddWordState extends State<AddWord> {
         _image = File(pickedFile.path);
         // widget.imgUrl = null;
       } else {
-        print("No Image Picked");
+        print('No Image Picked');
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController turkceController = TextEditingController();
-    TextEditingController ingilizceController = TextEditingController();
-    TextEditingController cumleController = TextEditingController();
+    var turkceController = TextEditingController();
+    var ingilizceController = TextEditingController();
+    var cumleController = TextEditingController();
 
     Future<void> addDataToFirestore() async {
       // Get the current user
-      User? user = _auth.currentUser;
+      var user = _auth.currentUser;
 
       if (user != null) {
-        String userId = user.uid;
+        var userId = user.uid;
         CollectionReference usersRef = _firestore.collection('users');
         // Reference to the subcollection
         CollectionReference wordsRef = usersRef.doc(userId).collection('words');
 
         if (_image != null) {
-          Reference storageReference = FirebaseStorage.instance.ref().child(
+          var storageReference = FirebaseStorage.instance.ref().child(
               'images/${DateTime.now().millisecondsSinceEpoch.toString()}');
-          UploadTask uploadTask = storageReference.putFile(_image!);
+          var uploadTask = storageReference.putFile(_image!);
           await uploadTask.whenComplete(() async {
             _imageUrl = await storageReference.getDownloadURL();
           });
         }
 
-        Map<String, dynamic> kelimeData = {
+        var kelimeData = <String, dynamic>{
           'turkce': turkceController.text,
           'ingilizce': ingilizceController.text,
           'cumle': cumleController.text,
@@ -75,8 +75,8 @@ class _AddWordState extends State<AddWord> {
       }
     }
 
-    double deviceHeight = MediaQuery.of(context).size.height;
-    double deviceWidth = MediaQuery.of(context).size.width;
+    var deviceHeight = MediaQuery.of(context).size.height;
+    var deviceWidth = MediaQuery.of(context).size.width;
     return SafeArea(
         child: Scaffold(
       backgroundColor: const Color(0xFFFBE1EF),
@@ -104,7 +104,7 @@ class _AddWordState extends State<AddWord> {
                   const Padding(
                     padding: EdgeInsets.only(left: 90),
                     child: Text(
-                      "KELİME EKLE",
+                      'KELİME EKLE',
                       style: TextStyle(
                           fontSize: 21,
                           fontWeight: FontWeight.bold,
@@ -146,7 +146,7 @@ class _AddWordState extends State<AddWord> {
                         const Padding(
                           padding: EdgeInsets.symmetric(horizontal: 20),
                           child: Text(
-                            "Türkçe Kelime",
+                            'Türkçe Kelime',
                             style: TextStyle(
                               fontSize: 20,
                             ),
@@ -169,7 +169,7 @@ class _AddWordState extends State<AddWord> {
                         const Padding(
                           padding: EdgeInsets.symmetric(horizontal: 20),
                           child: Text(
-                            "İngilizce Kelime",
+                            'İngilizce Kelime',
                             style: TextStyle(
                               fontSize: 20,
                             ),
@@ -192,7 +192,7 @@ class _AddWordState extends State<AddWord> {
             const Padding(
                 padding: EdgeInsets.only(top: 20),
                 child: Text(
-                  "Örnek Cümleler",
+                  'Örnek Cümleler',
                   style: TextStyle(
                     fontSize: 20,
                   ),
@@ -223,7 +223,7 @@ class _AddWordState extends State<AddWord> {
 
                   await addDataToFirestore();
 
-                  Navigator.push(
+                  await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const HomeScreen(),
@@ -234,7 +234,7 @@ class _AddWordState extends State<AddWord> {
                   minimumSize: const Size(200, 50),
                   backgroundColor: Colors.black.withOpacity(0.75),
                 ),
-                child: const Text("EKLE",
+                child: const Text('EKLE',
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.white,
