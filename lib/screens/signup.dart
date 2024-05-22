@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:last_projectt/screens/login.dart';
+import '../customs/customcolors.dart';
+import 'login.dart';
+import '../customs/input_decorations.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({Key? key}) : super(key: key);
@@ -11,6 +13,8 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
   late String email, password, userName, rpassword;
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
 
   final formkey = GlobalKey<FormState>();
 
@@ -19,7 +23,7 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFCE4EC),
+      backgroundColor: CustomColors.pinkcolor,
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -41,6 +45,8 @@ class _SignupPageState extends State<SignupPage> {
                       const SizedBox(height: 20),
                       passwordTextField(),
                       const SizedBox(height: 20),
+                      confirmPasswordTextField(),
+                      const SizedBox(height: 20),
                       signUpButton(),
                       const SizedBox(height: 10),
                       loginUpButton(),
@@ -60,7 +66,7 @@ class _SignupPageState extends State<SignupPage> {
       'Merhaba, Hoşgeldiniz',
       style: TextStyle(
         fontSize: 30,
-        color: Color(0xff31274F),
+        color: CustomColors.blackcolor,
         fontWeight: FontWeight.bold,
       ),
     );
@@ -72,6 +78,16 @@ class _SignupPageState extends State<SignupPage> {
         onPressed: () async {
           if (formkey.currentState!.validate()) {
             formkey.currentState!.save();
+
+            if (password != rpassword) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Şifreler eşleşmiyor'),
+                  backgroundColor: CustomColors.errorcolor,
+                ),
+              );
+              return;
+            }
 
             try {
               await firebaseAuth.createUserWithEmailAndPassword(
@@ -85,9 +101,13 @@ class _SignupPageState extends State<SignupPage> {
                       'Kayıt yapıldı, Giriş sayfasına yönlendiriliyorsunuz'),
                 ),
               );
-              await Navigator.pushReplacementNamed(context, '/loginPage');
+              Navigator.pushReplacementNamed(context, '/loginPage');
             } catch (e) {
-              print(e.toString());
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(e.toString()),
+                ),
+              );
             }
           }
         },
@@ -97,12 +117,14 @@ class _SignupPageState extends State<SignupPage> {
           margin: const EdgeInsets.symmetric(horizontal: 60),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(50),
-            color: const Color(0xff31274F),
+            color: CustomColors.buttoncolor,
           ),
           child: const Center(
             child: Text(
               'Hesap Oluştur',
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(
+                color: CustomColors.pinkcolor,
+              ),
             ),
           ),
         ),
@@ -116,12 +138,12 @@ class _SignupPageState extends State<SignupPage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => LoginPage()),
+            MaterialPageRoute(builder: (context) => const LoginPage()),
           );
         },
         child: const Text(
           'Giriş Yap',
-          style: TextStyle(color: Color(0xff31274F)),
+          style: TextStyle(color: CustomColors.blackcolor),
         ),
       ),
     );
@@ -138,7 +160,7 @@ class _SignupPageState extends State<SignupPage> {
       onSaved: (value) {
         userName = value!;
       },
-      decoration: customInputDecoration('user name'),
+      decoration: customInputDecoration('Kullanıcı Adı'),
     );
   }
 
@@ -147,13 +169,16 @@ class _SignupPageState extends State<SignupPage> {
       validator: (value) {
         if (value!.isEmpty) {
           return 'Bilgileri eksiksiz giriniz';
+        } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+            .hasMatch(value)) {
+          return 'Geçerli bir e-posta adresi girin';
         }
         return null;
       },
       onSaved: (value) {
         email = value!;
       },
-      decoration: customInputDecoration('email'),
+      decoration: customInputDecoration('Email'),
     );
   }
 
@@ -162,24 +187,57 @@ class _SignupPageState extends State<SignupPage> {
       validator: (value) {
         if (value!.isEmpty) {
           return 'Bilgileri eksiksiz giriniz';
+        } else if (value.length < 8) {
+          return 'Şifre en az 8 karakter olmalı';
+        } else if (!RegExp(r'[A-Z]').hasMatch(value)) {
+          return 'Şifre en az bir büyük harf içermeli';
+        } else if (!RegExp(r'[a-z]').hasMatch(value)) {
+          return 'Şifre en az bir küçük harf içermeli';
         }
         return null;
       },
       onSaved: (value) {
         password = value!;
       },
-      decoration: customInputDecoration('password'),
+      obscureText: _obscurePassword,
+      decoration: customInputDecoration('Şifre').copyWith(
+        suffixIcon: IconButton(
+          icon: Icon(
+            _obscurePassword ? Icons.visibility : Icons.visibility_off,
+          ),
+          onPressed: () {
+            setState(() {
+              _obscurePassword = !_obscurePassword;
+            });
+          },
+        ),
+      ),
     );
   }
 
-  InputDecoration customInputDecoration(String hintText) {
-    return InputDecoration(
-      hintText: hintText,
-      enabledBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: Colors.grey),
-      ),
-      focusedBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: Colors.grey),
+  TextFormField confirmPasswordTextField() {
+    return TextFormField(
+      validator: (value) {
+        if (value!.isEmpty) {
+          return 'Bilgileri eksiksiz giriniz';
+        }
+        return null;
+      },
+      onSaved: (value) {
+        rpassword = value!;
+      },
+      obscureText: _obscureConfirmPassword,
+      decoration: customInputDecoration('Şifreyi Tekrar Girin').copyWith(
+        suffixIcon: IconButton(
+          icon: Icon(
+            _obscureConfirmPassword ? Icons.visibility : Icons.visibility_off,
+          ),
+          onPressed: () {
+            setState(() {
+              _obscureConfirmPassword = !_obscureConfirmPassword;
+            });
+          },
+        ),
       ),
     );
   }

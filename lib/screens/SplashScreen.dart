@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Görüntü yüklemek için gerekli
-import 'package:last_projectt/screens/login.dart';
+import 'package:flutter/services.dart';
+import 'package:last_projectt/customs/customcolors.dart';
+import 'login.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -37,7 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: CustomColors.blackcolor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -58,7 +59,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   } else {
                     return Text(
                       'Image not found',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: CustomColors.whitecolor),
                     );
                   }
                 } else if (snapshot.connectionState ==
@@ -67,10 +68,10 @@ class _SplashScreenState extends State<SplashScreen> {
                 } else if (snapshot.hasError) {
                   return Text(
                     'Error loading image',
-                    style: TextStyle(color: Colors.red),
+                    style: TextStyle(color: CustomColors.errorcolor),
                   );
                 } else {
-                  return Container(); // Hata durumları için boş bir konteyner döndürün
+                  return Container();
                 }
               },
             ),

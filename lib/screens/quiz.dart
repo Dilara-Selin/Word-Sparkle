@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 import 'constants.dart'; // constants.dart dosyasını ekledik
 
 class Question extends StatefulWidget {
@@ -24,22 +25,23 @@ class _QuestState extends State<Question> {
     _loadSettings();
   }
 
+// consecutiveCorrectCount değerine göre beklenecek gün sayısı
   Duration calculateNextDate(int consecutiveCorrectCount) {
     switch (consecutiveCorrectCount) {
       case 0:
-        return Duration.zero; // Aynı gün
+        return Duration(days: 1);
       case 1:
-        return Duration(days: 1); // Bir sonraki gün
+        return Duration(days: 7);
       case 2:
-        return Duration(days: 7); // Bir hafta sonra
+        return Duration(days: 30);
       case 3:
-        return Duration(days: 30); // 1 ay sonra
+        return Duration(days: 90);
       case 4:
-        return Duration(days: 90); // 3 ay sonra
+        return Duration(days: 180);
       case 6:
-        return Duration(days: 180); // 6 ay sonra
+        return Duration(days: 365);
       default:
-        return Duration.zero; // Varsayılan olarak aynı gün
+        return Duration.zero;
     }
   }
 

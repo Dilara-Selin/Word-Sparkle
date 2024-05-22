@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:last_projectt/customs/customcolors.dart';
+
+import 'customcolors.dart';
 
 class CustomTextButton extends StatelessWidget {
   final VoidCallback onPressed;
@@ -10,7 +11,7 @@ class CustomTextButton extends StatelessWidget {
       {super.key,
       required this.onPressed,
       required this.buttonText,
-      this.textColor = CustomColors.textButtonColor});
+      this.textColor = CustomColors.blackcolor});
 
   @override
   Widget build(BuildContext context) {

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:last_projectt/customs/custom.elevatedbutton.dart';
-import 'package:last_projectt/screens/addword.dart';
-import 'package:last_projectt/screens/quiz.dart';
-import 'package:last_projectt/screens/settings.dart';
-import 'package:last_projectt/screens/SuccessModulePage.dart';
+import '../customs/customcolors.dart';
+import '../customs/custom.elevatedbutton.dart';
+import 'addword.dart';
+import 'quiz.dart';
+import 'settings.dart';
+import 'SuccessModulePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -31,11 +32,25 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Widget buildCustomButton({
+    required String content,
+    required VoidCallback onPressed,
+    EdgeInsetsGeometry padding = const EdgeInsets.only(top: 40),
+  }) {
+    return Padding(
+      padding: padding,
+      child: CustomElevatedButton(
+        onpressed: onPressed,
+        content: content,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: const Color(0xFFFBE1EF),
+        backgroundColor: CustomColors.pinkcolor,
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -44,52 +59,44 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Text(
                   'WORD SPARKLE',
                   style: TextStyle(
-                    color: Colors.black,
+                    color: CustomColors.blackcolor,
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              Padding(
+              buildCustomButton(
+                content: 'Kelime Ekle',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const AddWord()),
+                  );
+                },
                 padding: const EdgeInsets.only(top: 60),
-                child: CustomElevatedButton(
-                  onpressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const AddWord()),
-                    );
-                  },
-                  content: 'Kelime Ekle',
-                ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 40),
-                child: CustomElevatedButton(
-                  onpressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              const Question(questionCount: 10)),
-                    );
-                  },
-                  content: 'Quiz',
-                ),
+              buildCustomButton(
+                content: 'Quiz',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Question(questionCount: 10),
+                    ),
+                  );
+                },
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 40),
-                child: CustomElevatedButton(
-                  onpressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            SuccessModulePage(kullaniciId: _kullaniciId),
-                      ),
-                    );
-                  },
-                  content: 'Başarı İstatistiği',
-                ),
+              buildCustomButton(
+                content: 'Başarı İstatistiği',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          SuccessModulePage(kullaniciId: _kullaniciId),
+                    ),
+                  );
+                },
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -106,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       },
                       icon: const Icon(Icons.settings,
-                          size: 60, color: Colors.black),
+                          size: 60, color: CustomColors.blackcolor),
                     ),
                   ),
                 ],

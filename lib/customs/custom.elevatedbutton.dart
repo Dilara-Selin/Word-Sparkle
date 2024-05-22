@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:last_projectt/customs/customcolors.dart';
+
+import 'customcolors.dart';
 
 class CustomElevatedButton extends StatelessWidget {
   final VoidCallback onpressed;
