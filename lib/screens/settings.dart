@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:last_projectt/customs/customcolors.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key});
@@ -16,7 +17,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Color(0xFFFBE1EF),
+        backgroundColor: CustomColors.themecolor,
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -44,13 +45,14 @@ class _SettingsPageState extends State<SettingsPage> {
                       icon: const Icon(
                         Icons.arrow_back,
                         size: 40,
-                        color: Colors.black, // İkonun rengini siyah yaptık
+                        color: CustomColors
+                            .darktextcolor, // İkonun rengini siyah yaptık
                       ),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 20), // Geri ok ve başlık altına boşluk ekliyoruz
+              SizedBox(height: 50), // Geri ok ve başlık altına boşluk ekliyoruz
               Text(
                 'Soru Sayısı: $_questionCount',
                 style: TextStyle(fontSize: 20),
@@ -60,6 +62,11 @@ class _SettingsPageState extends State<SettingsPage> {
                 min: 1,
                 max: 20,
                 divisions: 19,
+                thumbColor: CustomColors.lighttextcolor,
+                activeColor: CustomColors.errorcolor,
+                overlayColor: MaterialStateColor.resolveWith(
+                    (states) => CustomColors.errorcolor.withOpacity(0.5)),
+                inactiveColor: Colors.white.withOpacity(0.5),
                 label: _questionCount.round().toString(),
                 onChanged: (value) {
                   setState(() {
@@ -67,6 +74,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   });
                 },
               ),
+              SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
                   // Kullanıcının seçtiği soru sayısını kaydet

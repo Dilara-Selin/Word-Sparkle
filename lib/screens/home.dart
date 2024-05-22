@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: CustomColors.pinkcolor,
+        backgroundColor: CustomColors.themecolor,
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Text(
                   'WORD SPARKLE',
                   style: TextStyle(
-                    color: CustomColors.blackcolor,
+                    color: CustomColors.darktextcolor,
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
                   ),
@@ -113,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       },
                       icon: const Icon(Icons.settings,
-                          size: 60, color: CustomColors.blackcolor),
+                          size: 60, color: CustomColors.darktextcolor),
                     ),
                   ),
                 ],

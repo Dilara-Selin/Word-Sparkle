@@ -58,9 +58,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CustomColors.pinkcolor,
+      backgroundColor: CustomColors.themecolor,
       appBar: AppBar(
-        backgroundColor: CustomColors.pinkcolor,
+        backgroundColor: CustomColors.themecolor,
         title: Text('Şifremi Unuttum',
             style: TextStyle(color: CustomColors.buttoncolor)),
       ),
@@ -77,7 +77,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   const Text(
                       'Şifrenizi size e-posta yoluyla gönderebilmemiz için e-posta adresinizi giriniz.',
                       style: TextStyle(
-                          fontSize: 19, color: CustomColors.blackcolor)),
+                          fontSize: 19, color: CustomColors.darktextcolor)),
                   const SizedBox(height: 20),
                   TextFormField(
                     controller: _emailController,
@@ -118,7 +118,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         ),
         child: const Center(
           child:
-              Text('Gönder', style: TextStyle(color: CustomColors.pinkcolor)),
+              Text('Gönder', style: TextStyle(color: CustomColors.themecolor)),
         ),
       ),
     );
@@ -133,7 +133,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         );
       },
       child: const Text('Giriş Yap',
-          style: TextStyle(color: CustomColors.blackcolor)),
+          style: TextStyle(color: CustomColors.darktextcolor)),
     );
   }
 }

@@ -2,15 +2,16 @@
 
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:last_projectt/customs/customcolors.dart';
+import 'package:rxdart/rxdart.dart';
 
-import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 import 'constants.dart'; // Bu sabitlerin tanımlı olduğundan emin olun
 
@@ -24,11 +25,11 @@ class SuccessModulePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFFBE1EF),
+        backgroundColor: CustomColors.themecolor,
         title: Text(
           'Başarı Modülü',
           style: TextStyle(
-            color: Colors.black.withOpacity(0.75),
+            color: CustomColors.buttoncolor,
           ),
         ),
         actions: [
@@ -130,7 +131,7 @@ class SuccessModulePage extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                  color: Colors.black,
+                  color: CustomColors.darktextcolor,
                   height: 0.5,
                 ),
                 RepaintBoundary(
@@ -164,12 +165,12 @@ class SuccessModulePage extends StatelessWidget {
                               : 0.0;
 
                           return Card(
-                            color: Colors.black.withOpacity(0.55),
+                            color: CustomColors.buttoncolor,
                             child: ListTile(
                               title: Text(
                                 'Kelime: ${wordData['ingilizce']}',
                                 style: TextStyle(
-                                  color: Color(0xFFFBE1EF),
+                                  color: CustomColors.themecolor,
                                 ),
                               ),
                               subtitle: Column(
@@ -178,25 +179,25 @@ class SuccessModulePage extends StatelessWidget {
                                   Text(
                                     'Doğru Sayısı: $correctCount',
                                     style: TextStyle(
-                                      color: Color(0xFFFBE1EF),
+                                      color: CustomColors.themecolor,
                                     ),
                                   ),
                                   Text(
                                     'Yanlış Sayısı: $incorrectCount',
                                     style: TextStyle(
-                                      color: Color(0xFFFBE1EF),
+                                      color: CustomColors.themecolor,
                                     ),
                                   ),
                                   Text(
                                     'Başarı Oranı: ${successRate.toStringAsFixed(2)}%',
                                     style: TextStyle(
-                                      color: Color(0xFFFBE1EF),
+                                      color: CustomColors.themecolor,
                                     ),
                                   ),
                                   Text(
                                     'Art Arda Doğru: $consecutiveCorrect',
                                     style: TextStyle(
-                                      color: Color(0xFFFBE1EF),
+                                      color: CustomColors.themecolor,
                                     ),
                                   ),
                                   SizedBox(height: 8),
@@ -214,7 +215,7 @@ class SuccessModulePage extends StatelessWidget {
           );
         },
       ),
-      backgroundColor: Color(0xFFFBE1EF),
+      backgroundColor: CustomColors.themecolor,
     );
   }
 

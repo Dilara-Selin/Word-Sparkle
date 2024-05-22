@@ -25,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CustomColors.pinkcolor,
+      backgroundColor: CustomColors.themecolor,
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
                     'Merhaba, Hoşgeldiniz',
                     style: TextStyle(
                       fontSize: 37,
-                      color: CustomColors.blackcolor,
+                      color: CustomColors.darktextcolor,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -124,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
         child: const Center(
           child: Text(
             'Giriş Yap',
-            style: TextStyle(color: CustomColors.pinkcolor),
+            style: TextStyle(color: CustomColors.themecolor),
           ),
         ),
       ),
@@ -143,7 +143,7 @@ class _LoginPageState extends State<LoginPage> {
       SnackBar(
         content: Row(
           children: [
-            Icon(icon, color: CustomColors.whitecolor),
+            Icon(icon, color: CustomColors.lighttextcolor),
             const SizedBox(width: 8),
             Text(message),
           ],

@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:last_projectt/customs/customcolors.dart';
 import 'home.dart';
 
 class AddWord extends StatefulWidget {
@@ -16,11 +17,9 @@ class AddWord extends StatefulWidget {
 class _AddWordState extends State<AddWord> {
   final _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final _picker = ImagePicker();
 
   File? _image;
-  String? _imageUrl;
-  final picker = ImagePicker();
-
   final _formKey = GlobalKey<FormState>();
   final _turkceController = TextEditingController();
   final _ingilizceController = TextEditingController();
@@ -34,58 +33,43 @@ class _AddWordState extends State<AddWord> {
     super.dispose();
   }
 
-  Future<void> getImageGallery() async {
-    final pickedFile = await picker.pickImage(
+  Future<void> _pickImage() async {
+    final pickedFile = await _picker.pickImage(
       source: ImageSource.gallery,
       imageQuality: 80,
     );
     setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-      } else {
-        print('No Image Picked');
-      }
+      _image = pickedFile != null ? File(pickedFile.path) : null;
     });
   }
 
-  Future<void> addDataToFirestore() async {
+  Future<void> _addDataToFirestore() async {
     final user = _auth.currentUser;
     if (user != null) {
-      final userId = user.uid;
-      final wordsRef =
-          _firestore.collection('users').doc(userId).collection('words');
-
+      String? imageUrl;
       if (_image != null) {
-        final storageReference = FirebaseStorage.instance
+        final storageRef = FirebaseStorage.instance
             .ref()
             .child('images/${DateTime.now().millisecondsSinceEpoch}');
-        final uploadTask = storageReference.putFile(_image!);
-        await uploadTask.whenComplete(() async {
-          _imageUrl = await storageReference.getDownloadURL();
-        });
+        await storageRef.putFile(_image!);
+        imageUrl = await storageRef.getDownloadURL();
       }
 
       final kelimeData = {
         'turkce': _turkceController.text,
         'ingilizce': _ingilizceController.text,
         'cumle': _cumleController.text,
-        'imageUrl': _imageUrl,
+        'imageUrl': imageUrl,
         'nextTestDate': Timestamp.now(),
         'addedDate': Timestamp.now(),
       };
 
-      await wordsRef.add(kelimeData);
+      await _firestore
+          .collection('users')
+          .doc(user.uid)
+          .collection('words')
+          .add(kelimeData);
     }
-  }
-
-  void _showSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        duration: const Duration(seconds: 2),
-        backgroundColor: Colors.red,
-      ),
-    );
   }
 
   @override
@@ -95,7 +79,7 @@ class _AddWordState extends State<AddWord> {
 
     return SafeArea(
       child: Scaffold(
-        backgroundColor: const Color(0xFFFBE1EF),
+        backgroundColor: CustomColors.themecolor,
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -103,7 +87,7 @@ class _AddWordState extends State<AddWord> {
                 width: deviceWidth,
                 height: deviceHeight / 10,
                 decoration: const BoxDecoration(
-                  color: Color(0xFFFBE1EF),
+                  color: CustomColors.themecolor,
                 ),
                 child: Row(
                   children: [
@@ -112,7 +96,7 @@ class _AddWordState extends State<AddWord> {
                       icon: const Icon(
                         Icons.arrow_back,
                         size: 40,
-                        color: Colors.white,
+                        color: CustomColors.lighttextcolor,
                       ),
                     ),
                     const Spacer(),
@@ -121,7 +105,7 @@ class _AddWordState extends State<AddWord> {
                       style: TextStyle(
                         fontSize: 21,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: CustomColors.darktextcolor,
                       ),
                     ),
                     const Spacer(flex: 2),
@@ -129,16 +113,16 @@ class _AddWordState extends State<AddWord> {
                 ),
               ),
               InkWell(
-                onTap: getImageGallery,
+                onTap: _pickImage,
                 child: Padding(
                   padding: const EdgeInsets.only(top: 20),
                   child: Container(
                     width: 140,
                     height: 140,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: CustomColors.lighttextcolor,
                       border: Border.all(
-                        color: Colors.black.withOpacity(0.75),
+                        color: CustomColors.buttoncolor,
                         width: 1,
                       ),
                       borderRadius: BorderRadius.circular(18),
@@ -167,12 +151,10 @@ class _AddWordState extends State<AddWord> {
                             child: _buildTextField(
                               controller: _turkceController,
                               label: 'Türkçe Kelime',
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Türkçe kelime boş olamaz';
-                                }
-                                return null;
-                              },
+                              validator: (value) =>
+                                  value == null || value.isEmpty
+                                      ? 'Türkçe kelime boş olamaz'
+                                      : null,
                             ),
                           ),
                           const SizedBox(width: 10),
@@ -180,12 +162,10 @@ class _AddWordState extends State<AddWord> {
                             child: _buildTextField(
                               controller: _ingilizceController,
                               label: 'İngilizce Kelime',
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'İngilizce kelime boş olamaz';
-                                }
-                                return null;
-                              },
+                              validator: (value) =>
+                                  value == null || value.isEmpty
+                                      ? 'İngilizce kelime boş olamaz'
+                                      : null,
                             ),
                           ),
                         ],
@@ -195,27 +175,29 @@ class _AddWordState extends State<AddWord> {
                         controller: _cumleController,
                         label: 'Örnek Cümleler',
                         maxLines: 5,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Örnek cümleler boş olamaz';
-                          }
-                          return null;
-                        },
+                        validator: (value) => value == null || value.isEmpty
+                            ? 'Örnek cümleler boş olamaz'
+                            : null,
                       ),
                       const SizedBox(height: 30),
                       ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            await addDataToFirestore();
+                            await _addDataToFirestore();
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const HomeScreen(),
-                              ),
+                                  builder: (context) => const HomeScreen()),
                             );
                           } else {
-                            _showSnackBar(
-                                context, 'Lütfen tüm alanları doldurun');
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content:
+                                    const Text('Lütfen tüm alanları doldurun'),
+                                duration: const Duration(seconds: 2),
+                                backgroundColor: CustomColors.errorcolor,
+                              ),
+                            );
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -225,9 +207,7 @@ class _AddWordState extends State<AddWord> {
                         child: const Text(
                           'EKLE',
                           style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                          ),
+                              fontSize: 20, color: CustomColors.lighttextcolor),
                         ),
                       ),
                     ],
@@ -252,22 +232,18 @@ class _AddWordState extends State<AddWord> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 20,
-            ),
-          ),
+          Text(label, style: const TextStyle(fontSize: 20)),
           const SizedBox(height: 10),
           TextFormField(
             controller: controller,
             maxLines: maxLines,
             decoration: InputDecoration(
               filled: true,
-              fillColor: Colors.white,
+              fillColor: CustomColors.lighttextcolor,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: const BorderSide(color: Colors.white),
+                borderSide:
+                    const BorderSide(color: CustomColors.lighttextcolor),
               ),
             ),
             validator: validator,

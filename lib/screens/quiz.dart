@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:last_projectt/customs/customcolors.dart';
 
 import 'constants.dart'; // constants.dart dosyasını ekledik
 
@@ -134,7 +135,7 @@ class _QuestState extends State<Question> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFBE1EF),
+      backgroundColor: CustomColors.themecolor,
       body: SingleChildScrollView(
         child: Container(
           margin: EdgeInsets.only(top: 50.0, left: 10.0, right: 10.0),
@@ -153,7 +154,7 @@ class _QuestState extends State<Question> {
                           icon: const Icon(
                             Icons.arrow_back,
                             size: 40,
-                            color: Colors.white,
+                            color: CustomColors.lighttextcolor,
                           ),
                         ),
                       ],
@@ -170,7 +171,7 @@ class _QuestState extends State<Question> {
                       padding: EdgeInsets.all(15),
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        border: Border.all(color: Color(0xFFFBE1EF)),
+                        border: Border.all(color: CustomColors.themecolor),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Column(
@@ -181,7 +182,7 @@ class _QuestState extends State<Question> {
                                 ? 'No word available'
                                 : ingilizce[currentWordIndex].get('ingilizce'),
                             style: TextStyle(
-                              color: Colors.black,
+                              color: CustomColors.darktextcolor,
                               fontSize: 30.0,
                               fontWeight: FontWeight.w500,
                             ),
@@ -194,7 +195,7 @@ class _QuestState extends State<Question> {
                                 : ingilizce[currentWordIndex].get('cumle'),
                             textAlign: TextAlign.start,
                             style: TextStyle(
-                              color: Colors.black54,
+                              color: CustomColors.darktextcolor,
                               fontSize: 23.0,
                             ),
                           ),
@@ -261,7 +262,7 @@ class _QuestState extends State<Question> {
         SnackBar(
           content: Row(
             children: [
-              Icon(Icons.check, color: Colors.white),
+              Icon(Icons.check, color: CustomColors.lighttextcolor),
               SizedBox(width: 8),
               Text('Your answer is correct.'),
             ],
@@ -279,7 +280,7 @@ class _QuestState extends State<Question> {
         SnackBar(
           content: Row(
             children: [
-              Icon(Icons.close, color: Colors.white),
+              Icon(Icons.close, color: CustomColors.lighttextcolor),
               SizedBox(width: 8),
               Text('Your answer is incorrect.'),
             ],

@@ -23,7 +23,7 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CustomColors.pinkcolor,
+      backgroundColor: CustomColors.themecolor,
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -66,7 +66,7 @@ class _SignupPageState extends State<SignupPage> {
       'Merhaba, Hoşgeldiniz',
       style: TextStyle(
         fontSize: 30,
-        color: CustomColors.blackcolor,
+        color: CustomColors.darktextcolor,
         fontWeight: FontWeight.bold,
       ),
     );
@@ -123,7 +123,7 @@ class _SignupPageState extends State<SignupPage> {
             child: Text(
               'Hesap Oluştur',
               style: TextStyle(
-                color: CustomColors.pinkcolor,
+                color: CustomColors.themecolor,
               ),
             ),
           ),
@@ -143,7 +143,7 @@ class _SignupPageState extends State<SignupPage> {
         },
         child: const Text(
           'Giriş Yap',
-          style: TextStyle(color: CustomColors.blackcolor),
+          style: TextStyle(color: CustomColors.darktextcolor),
         ),
       ),
     );

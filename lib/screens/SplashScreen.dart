@@ -38,7 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CustomColors.blackcolor,
+      backgroundColor: CustomColors.darktextcolor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -59,7 +59,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   } else {
                     return Text(
                       'Image not found',
-                      style: TextStyle(color: CustomColors.whitecolor),
+                      style: TextStyle(color: CustomColors.lighttextcolor),
                     );
                   }
                 } else if (snapshot.connectionState ==
