@@ -125,7 +125,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     );
   }
 
-  Widget _buildLoginButton() {
+  Widget _buildLoginButton() {   // login button hem burada hem de signup kısmında aynı içeriğe sahip customwdget yapılabilir
     return TextButton(
       onPressed: () {
         Navigator.push(

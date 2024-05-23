@@ -13,7 +13,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'constants.dart'; // Bu sabitlerin tanımlı olduğundan emin olun
+import 'constants.dart';
 
 class SuccessModulePage extends StatelessWidget {
   final GlobalKey<State<StatefulWidget>> _printKey = GlobalKey();
@@ -167,6 +167,8 @@ class SuccessModulePage extends StatelessWidget {
                           return Card(
                             color: CustomColors.buttoncolor,
                             child: ListTile(
+                              // Textler için customwidget açılabilir content olarak sadece içerisine yazılan yazıyı alırız.
+                              // style kısmı gereksiz sürekli tekrarlanıyor.
                               title: Text(
                                 'Kelime: ${wordData['ingilizce']}',
                                 style: TextStyle(

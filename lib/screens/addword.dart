@@ -222,6 +222,7 @@ class _AddWordState extends State<AddWord> {
   }
 
   Widget _buildTextField({
+    // customs dosyasına aktarılacak customwidget olarak kullanılacak
     required TextEditingController controller,
     required String label,
     int maxLines = 1,

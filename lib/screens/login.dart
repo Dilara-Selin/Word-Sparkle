@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import '../customs/customcolors.dart';
 import '../customs/customtextbutton.dart';
 import '../customs/input_decorations.dart';
@@ -97,6 +96,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   TextFormField buildTextFormField({
+    // customs dosyasına eklenecek
     required String hintText,
     required FormFieldSetter<String> onSaved,
     required FormFieldValidator<String> validator,

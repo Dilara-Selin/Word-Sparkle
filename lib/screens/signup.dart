@@ -12,7 +12,7 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
-  late String email, password, userName, rpassword;
+  late String email, password, userName, passwordControl;
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
 
@@ -79,7 +79,7 @@ class _SignupPageState extends State<SignupPage> {
           if (formkey.currentState!.validate()) {
             formkey.currentState!.save();
 
-            if (password != rpassword) {
+            if (password != passwordControl) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Şifreler eşleşmiyor'),
@@ -224,7 +224,7 @@ class _SignupPageState extends State<SignupPage> {
         return null;
       },
       onSaved: (value) {
-        rpassword = value!;
+        passwordControl = value!;
       },
       obscureText: _obscureConfirmPassword,
       decoration: customInputDecoration('Şifreyi Tekrar Girin').copyWith(
