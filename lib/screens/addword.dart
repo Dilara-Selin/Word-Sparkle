@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:last_projectt/customs/customcolors.dart';
+import '../customs/customcolors.dart';
 import 'home.dart';
 
 class AddWord extends StatefulWidget {

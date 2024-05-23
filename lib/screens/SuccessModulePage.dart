@@ -2,16 +2,16 @@
 
 import 'dart:typed_data';
 import 'dart:ui' as ui;
-import 'package:last_projectt/customs/customcolors.dart';
-import 'package:rxdart/rxdart.dart';
 
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'package:printing/printing.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:last_projectt/customs/customcolors.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
+import 'package:rxdart/rxdart.dart';
 
 import 'constants.dart'; // Bu sabitlerin tanımlı olduğundan emin olun
 

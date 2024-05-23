@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:last_projectt/customs/customcolors.dart';
+import '../customs/customcolors.dart';
 import 'login.dart';
 
 class SplashScreen extends StatefulWidget {

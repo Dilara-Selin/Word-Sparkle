@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:last_projectt/customs/customcolors.dart';
+import '../customs/customcolors.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key});
