@@ -100,8 +100,6 @@ class _SignupPageState extends State<SignupPage> {
                   content: Text('Kayıt yapıldı.Giriş yapabilirsiniz.'),
                 ),
               );
-
-              Navigator.pushReplacementNamed(context, '/loginPage');
             } catch (e) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
