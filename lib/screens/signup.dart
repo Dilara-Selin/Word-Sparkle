@@ -97,10 +97,10 @@ class _SignupPageState extends State<SignupPage> {
               formkey.currentState!.reset();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text(
-                      'Kayıt yapıldı, Giriş sayfasına yönlendiriliyorsunuz'),
+                  content: Text('Kayıt yapıldı.Giriş yapabilirsiniz.'),
                 ),
               );
+
               Navigator.pushReplacementNamed(context, '/loginPage');
             } catch (e) {
               ScaffoldMessenger.of(context).showSnackBar(
