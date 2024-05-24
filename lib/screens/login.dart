@@ -96,7 +96,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   TextFormField buildTextFormField({
-    // customs dosyasına eklenecek
     required String hintText,
     required FormFieldSetter<String> onSaved,
     required FormFieldValidator<String> validator,

@@ -8,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:last_projectt/customs/customCardWidget.dart';
 import 'package:last_projectt/customs/customcolors.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
@@ -167,40 +168,24 @@ class SuccessModulePage extends StatelessWidget {
                           return Card(
                             color: CustomColors.buttoncolor,
                             child: ListTile(
-                              // Textler için customwidget açılabilir content olarak sadece içerisine yazılan yazıyı alırız.
-                              // style kısmı gereksiz sürekli tekrarlanıyor.
-                              title: Text(
-                                'Kelime: ${wordData['ingilizce']}',
-                                style: TextStyle(
-                                  color: CustomColors.themecolor,
-                                ),
+                              title: CustomCardWidget(
+                                text: 'Kelime: ${wordData['ingilizce']}',
                               ),
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    'Doğru Sayısı: $correctCount',
-                                    style: TextStyle(
-                                      color: CustomColors.themecolor,
-                                    ),
+                                  CustomCardWidget(
+                                    text: 'Doğru Sayısı: $correctCount',
                                   ),
-                                  Text(
-                                    'Yanlış Sayısı: $incorrectCount',
-                                    style: TextStyle(
-                                      color: CustomColors.themecolor,
-                                    ),
+                                  CustomCardWidget(
+                                    text: 'Yanlış Sayısı: $incorrectCount',
                                   ),
-                                  Text(
-                                    'Başarı Oranı: ${successRate.toStringAsFixed(2)}%',
-                                    style: TextStyle(
-                                      color: CustomColors.themecolor,
-                                    ),
+                                  CustomCardWidget(
+                                    text:
+                                        'Başarı Oranı: ${successRate.toStringAsFixed(2)}%',
                                   ),
-                                  Text(
-                                    'Art Arda Doğru: $consecutiveCorrect',
-                                    style: TextStyle(
-                                      color: CustomColors.themecolor,
-                                    ),
+                                  CustomCardWidget(
+                                    text: 'Art Arda Doğru: $consecutiveCorrect',
                                   ),
                                   SizedBox(height: 8),
                                 ],

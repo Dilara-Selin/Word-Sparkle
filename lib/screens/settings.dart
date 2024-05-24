@@ -82,7 +82,14 @@ class _SettingsPageState extends State<SettingsPage> {
                   // Ayarlar sayfasını kapatarak önceki sayfaya dön
                   Navigator.of(context).pop();
                 },
-                child: Text('Kaydet'),
+                child: Text(
+                  'Kaydet',
+                  style: TextStyle(color: CustomColors.themecolor),
+                ),
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(CustomColors.buttoncolor),
+                ),
               ),
             ],
           ),

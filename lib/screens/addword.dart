@@ -246,6 +246,11 @@ class _AddWordState extends State<AddWord> {
                 borderSide:
                     const BorderSide(color: CustomColors.lighttextcolor),
               ),
+              errorStyle: TextStyle(color: CustomColors.errorcolor),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: const BorderSide(color: CustomColors.errorcolor),
+              ),
             ),
             validator: validator,
           ),

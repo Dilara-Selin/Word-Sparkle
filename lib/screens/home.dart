@@ -32,7 +32,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Widget buildCustomButton({   // custom.elevatedbuttonunun içerisine aktarılacak
+  Widget buildCustomButton({
+    // custom.elevatedbuttonunun içerisine aktarılacak
     required String content,
     required VoidCallback onPressed,
     EdgeInsetsGeometry padding = const EdgeInsets.only(top: 40),
